@@ -6,6 +6,7 @@ import com.project.diss.controller.dto.Token;
 import com.project.diss.controller.dto.UserDto;
 import com.project.diss.converters.UserConverter;
 import com.project.diss.exception.AuthenticationException;
+import com.project.diss.exception.ConflictException;
 import com.project.diss.persistance.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,22 +36,33 @@ public class UserService {
     }
 
     public Token createJwtForUser(String email, String password) throws AuthenticationException {
-        UserEntity user = getUserInformation(email, password);
+        UserEntity user = getUserInformation(email);
+        if (user == null) {
+            log.error("Authentication failed: No user found with email '{}'.", email);
+            throw new AuthenticationException();
+        }
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            log.error("Authentication failed: Password does not match for user '{}'.", email);
+            throw new AuthenticationException();
+        }
+
         Token token = new Token();
         token.setToken(jwtTokenService.createJwtToken(user.getEmail(), user.getType(), user.getId()));
+        log.info("JWT token generated successfully for user '{}'.", email);
         return token;
     }
 
-    public UserEntity getUserInformation(String email, String password) throws AuthenticationException {
-        UserEntity user = userRepository.findByEmail(email);
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())){
-            throw new AuthenticationException();
-        }
-        return user;
+
+    public UserEntity getUserInformation(String email) {
+        return userRepository.findByEmail(email);
     }
 
-    public UserDto createUser(CreateUserDto dto) {
+    public UserDto createUser(CreateUserDto dto) throws ConflictException {
         UserEntity user = userConverter.convertCreateUserDtoToUserEntity(dto);
+        if(getUserInformation(user.getEmail()) != null) {
+            log.error("Could not save database entry because user with email '{}' already exists.", user.getEmail());
+            throw new ConflictException();
+        }
         return userConverter.convertUserEntityToUserDto(userRepository.save(user));
     }
 

@@ -1,7 +1,8 @@
-package com.project.diss.exception;
+package com.project.diss.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.diss.controller.dto.ErrorResponse;
+import com.project.diss.exception.ServiceErrorCodes;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 

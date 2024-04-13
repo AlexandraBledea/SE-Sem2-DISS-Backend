@@ -34,6 +34,20 @@ public class RestExceptionHandler {
     }
 
     /**
+     * Handles Missing request exceptions.
+     */
+    @ExceptionHandler({
+            HttpMessageNotReadableException.class,
+            MissingRequestHeaderException.class,
+            MissingRequestValueException.class,
+            MissingRequestCookieException.class
+    })
+    public ResponseEntity<Object> handleRequestException(Exception exception) {
+        log.info("The request was missing a required parameter.", exception);
+        return ResponseEntity.badRequest().build();
+    }
+
+    /**
      * Handles {@link AuthenticationException}s
      */
     @ExceptionHandler({AuthenticationException.class})
@@ -74,19 +88,12 @@ public class RestExceptionHandler {
     }
 
     /**
-     * Handles Missing request exceptions.
+     * Handles {@link RequestNotValidException}s.
      */
-    @ExceptionHandler({
-            HttpMessageNotReadableException.class,
-            MissingRequestHeaderException.class,
-            MissingRequestValueException.class,
-            MissingRequestCookieException.class
-    })
-    public ResponseEntity<Object> handleRequestException(Exception exception) {
-        log.info("The request was missing a required parameter.", exception);
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(RequestNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleException(RequestNotValidException requestNotValidException) {
+        return new ResponseEntity<>(createErrorResponse(requestNotValidException), HttpStatus.BAD_REQUEST);
     }
-
 
     /**
      * Creates a {@link ErrorResponse} from parameters from the {@link BaseException}.

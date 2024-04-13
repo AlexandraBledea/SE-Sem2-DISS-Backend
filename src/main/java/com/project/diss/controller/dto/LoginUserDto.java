@@ -3,7 +3,7 @@ package com.project.diss.controller.dto;
 import lombok.Data;
 
 @Data
-public class LoginUser {
+public class LoginUserDto {
     private String email;
     private String password;
 }
