@@ -1,0 +1,31 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20240413-document-001" author="alebledea">
+        <createTable tableName="document">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_user_id" references="user(id)"/>
+            </column>
+            <column name="title" type="varchar(255)"/>
+            <column name="text" type="varchar"/>
+            <column name="file" type="bytea"/>
+            <column name="creation_date" type="timestamp"/>
+            <column name="last_modified" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20240413-document-002" author="alebledea">
+        <dropColumn tableName="document" columnName="user_id"/>
+        <addColumn tableName="document">
+            <column name="fk_user_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_user_id" references="user(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

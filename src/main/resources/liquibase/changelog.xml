@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <include file="liquibase/20240413-user-changelog.xml" />
+    <include file="liquibase/20240413-document-changelog.xml" />
+    <include file="liquibase/20240413-comment-changelog.xml" />
+    <include file="liquibase/20240413-employee-document-changelog.xml" />
+    <include file="liquibase/20240413-company-document-changelog.xml" />
+    <include file="liquibase/20240413-training-document-changelog.xml" />
+    <include file="liquibase/20240413-badge-changelog.xml" />
+</databaseChangeLog>

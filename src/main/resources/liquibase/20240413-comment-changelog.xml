@@ -1,0 +1,34 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20240413-comment-001" author="alebledea">
+        <createTable tableName="comment">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="document_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_document_id" references="document(id)"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_user_id" references="user(id)"/>
+            </column>
+            <column name="text" type="varchar"/>
+            <column name="date" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20240413-comment-002" author="alebledea">
+        <dropColumn tableName="comment" columnName="user_id"/>
+        <dropColumn tableName="comment" columnName="document_id"/>
+        <addColumn tableName="comment">
+            <column name="fk_document_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_document_id" references="document(id)"/>
+            </column>
+            <column name="fk_user_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_user_id" references="user(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

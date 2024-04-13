@@ -1,0 +1,28 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20240413-training-document-001" author="alebledea">
+        <createTable tableName="training_document">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="document_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_document_id" references="document(id)"/>
+            </column>
+            <column name="reward" type="int"/>
+            <column name="required_points" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20240413-training-document-002" author="alebledea">
+        <dropColumn tableName="training_document" columnName="document_id"/>
+        <addColumn tableName="training_document">
+            <column name="fk_document_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_document_id" references="document(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
