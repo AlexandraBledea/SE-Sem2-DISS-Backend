@@ -28,4 +28,8 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20240413-document-003" author="alebledea">
+        <addAutoIncrement tableName="document" columnName="id"/>
+    </changeSet>
+
 </databaseChangeLog>

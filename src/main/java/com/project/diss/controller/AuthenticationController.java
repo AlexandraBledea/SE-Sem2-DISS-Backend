@@ -1,7 +1,7 @@
 package com.project.diss.controller;
 
-import com.project.diss.controller.model.LoginUser;
-import com.project.diss.controller.model.Token;
+import com.project.diss.controller.dto.LoginUser;
+import com.project.diss.controller.dto.Token;
 import com.project.diss.exception.AuthenticationException;
 import com.project.diss.service.UserService;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,10 @@
 package com.project.diss.configuration;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.diss.controller.dto.ErrorResponse;
+import com.project.diss.exception.JwtTokenException;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.FilterChain;
@@ -19,13 +23,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtTokenService jwtTokenService;
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws IOException, ServletException {
         try {
             Authentication auth = jwtTokenService.getAuthentication(request);
             SecurityContextHolder.getContext().setAuthentication(auth);
             filterChain.doFilter(request, response);
-        } catch (final Exception ex) {
-            (response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error parsing JWT Token");
+
+        } catch (JwtTokenException ex) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=UTF-8");
+            ErrorResponse errorResponse = new ErrorResponse(
+                    ex.getErrorCode(), ex.getErrorName(), ex.getErrorMessage()
+            );
+            response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
         }
     }
 

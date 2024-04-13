@@ -31,4 +31,8 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20240413-comment-003" author="alebledea">
+        <addAutoIncrement tableName="comment" columnName="id"/>
+    </changeSet>
 </databaseChangeLog>

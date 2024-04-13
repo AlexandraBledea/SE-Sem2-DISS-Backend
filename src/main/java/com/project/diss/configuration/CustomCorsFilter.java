@@ -24,7 +24,7 @@ public class CustomCorsFilter implements Filter {
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin")); //host where frontend is running
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, PATCH");
         response.setHeader("Access-Control-Allow-Headers",
-                "Content-Type, Authentication");
+                "Content-Type, Authorization");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         chain.doFilter(req, res);
     }

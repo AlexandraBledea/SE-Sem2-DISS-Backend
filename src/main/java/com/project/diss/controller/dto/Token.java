@@ -1,4 +1,4 @@
-package com.project.diss.controller.model;
+package com.project.diss.controller.dto;
 
 import lombok.Data;
 

@@ -1,7 +1,10 @@
 package com.project.diss.service;
 
 import com.project.diss.configuration.JwtTokenService;
-import com.project.diss.controller.model.Token;
+import com.project.diss.controller.dto.CreateUserDto;
+import com.project.diss.controller.dto.Token;
+import com.project.diss.controller.dto.UserDto;
+import com.project.diss.converters.UserConverter;
 import com.project.diss.exception.AuthenticationException;
 import com.project.diss.persistance.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +24,14 @@ public class UserService {
 
     private final JwtTokenService jwtTokenService;
 
+    private final UserConverter userConverter;
+
     @Autowired
-    public UserService(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, JwtTokenService jwtTokenService) {
+    public UserService(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, JwtTokenService jwtTokenService, UserConverter userConverter) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.jwtTokenService = jwtTokenService;
+        this.userConverter = userConverter;
     }
 
     public Token createJwtForUser(String email, String password) throws AuthenticationException {
@@ -41,6 +47,11 @@ public class UserService {
             throw new AuthenticationException();
         }
         return user;
+    }
+
+    public UserDto createUser(CreateUserDto dto) {
+        UserEntity user = userConverter.convertCreateUserDtoToUserEntity(dto);
+        return userConverter.convertUserEntityToUserDto(userRepository.save(user));
     }
 
 }

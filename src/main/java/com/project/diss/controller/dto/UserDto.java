@@ -1,9 +1,10 @@
-package com.project.diss.controller.model;
+package com.project.diss.controller.dto;
 
+import com.project.diss.persistance.entity.enums.UserType;
 import lombok.Data;
 
 @Data
-public class User {
+public class UserDto {
 
     private Long id;
     private String email;
@@ -15,5 +16,5 @@ public class User {
     private String location;
     private Integer level;
     private Integer points;
-    private String type;
+    private UserType type;
 }

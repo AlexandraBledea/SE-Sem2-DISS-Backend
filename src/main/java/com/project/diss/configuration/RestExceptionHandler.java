@@ -1,6 +1,6 @@
 package com.project.diss.configuration;
 
-import com.project.diss.controller.model.ErrorResponse;
+import com.project.diss.controller.dto.ErrorResponse;
 import com.project.diss.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -8,6 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingRequestValueException;
@@ -33,19 +34,19 @@ public class RestExceptionHandler {
     }
 
     /**
-     * Handles {@link NotAuthorizedException}s
-     */
-    @ExceptionHandler({NotAuthorizedException.class})
-    public ResponseEntity<ErrorResponse> handleException(NotAuthorizedException notAuthorizedException) {
-        return new ResponseEntity<>(createErrorResponse(notAuthorizedException), HttpStatus.UNAUTHORIZED);
-    }
-
-    /**
      * Handles {@link AuthenticationException}s
      */
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<ErrorResponse> handleException(AuthenticationException accountNotFoundException) {
         return new ResponseEntity<>(createErrorResponse(accountNotFoundException), HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Handles {@link AccessDeniedException}s
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDeniedException() {
+        return new ResponseEntity<>(createAccessDeniedErrorResponse(), HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -111,6 +112,14 @@ public class RestExceptionHandler {
         errorResponse.setErrorCode(INTERNAL_SERVER_ERROR.errorCode());
         errorResponse.setErrorName(INTERNAL_SERVER_ERROR.errorName());
         errorResponse.setErrorMessage(INTERNAL_SERVER_ERROR.errorMessage());
+        return errorResponse;
+    }
+
+    protected ErrorResponse createAccessDeniedErrorResponse() {
+        final ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(ServiceErrorCodes.ACCESS_DENIED_ERROR.errorCode());
+        errorResponse.setErrorName(ServiceErrorCodes.ACCESS_DENIED_ERROR.errorName());
+        errorResponse.setErrorMessage(ServiceErrorCodes.ACCESS_DENIED_ERROR.errorMessage());
         return errorResponse;
     }
 

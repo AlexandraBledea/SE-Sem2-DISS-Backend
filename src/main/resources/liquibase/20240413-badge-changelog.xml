@@ -29,4 +29,8 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20240413-badge-003" author="alebledea">
+        <addAutoIncrement tableName="badge" columnName="id"/>
+    </changeSet>
 </databaseChangeLog>

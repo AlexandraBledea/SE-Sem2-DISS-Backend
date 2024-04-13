@@ -22,4 +22,12 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="20240413-user-002" author="alebledea">
+        <addAutoIncrement tableName="user" columnName="id"/>
+    </changeSet>
+
+    <changeSet id="20240413-user-003" author="alebledea">
+        <addUniqueConstraint tableName="user" columnNames="email"/>
+    </changeSet>
+
 </databaseChangeLog>
