@@ -11,6 +11,7 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="employee_document")
 public class EmployeeDocumentEntity extends AbstractEntity{
 
     @OneToOne

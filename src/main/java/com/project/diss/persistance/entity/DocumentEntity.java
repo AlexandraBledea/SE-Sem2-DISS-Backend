@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "document")
 public class DocumentEntity extends AbstractEntity {
 
     @Column(nullable = false)

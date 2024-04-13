@@ -11,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -88,7 +87,7 @@ public class JwtTokenService {
         return auth;
     }
 
-    public String createJwtToken(final String email, final Type type, final Long id) {
+    public String createJwtToken(final String email, final String type, final Long id) {
         // create the jwt token
         String jwtToken;
 

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="comment")
 public class CommentEntity extends AbstractEntity{
 
     @ManyToOne(cascade = CascadeType.ALL)

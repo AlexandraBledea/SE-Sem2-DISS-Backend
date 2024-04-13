@@ -1,7 +1,6 @@
 package com.project.diss.persistance.entity;
 
 
-import com.project.diss.persistance.entity.enums.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +14,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="user")
 public class UserEntity extends AbstractEntity{
 
     @Column(nullable = false)
@@ -41,9 +41,8 @@ public class UserEntity extends AbstractEntity{
     @Column
     private String location;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserType type;
+    private String type;
 
     @Column
     private Integer level;
