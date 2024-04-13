@@ -28,6 +28,9 @@ public class DocumentEntity extends AbstractEntity {
     @Column
     private byte[] document;
 
+    @Column
+    private String keywords;
+
     @CreationTimestamp
     @Column(name = "creation_date")
     private LocalDateTime created;
