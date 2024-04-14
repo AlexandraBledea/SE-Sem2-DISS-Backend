@@ -65,6 +65,8 @@ public class WebSecurityConfiguration {
 
         // Including additional headers
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+
+        configuration.setAllowCredentials(true);
         return configuration;
     }
 
