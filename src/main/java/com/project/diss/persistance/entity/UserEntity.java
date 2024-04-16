@@ -58,4 +58,7 @@ public class UserEntity extends AbstractEntity{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<BadgeEntity> badges;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<CommentEntity> comments;
+
 }

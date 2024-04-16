@@ -21,6 +21,10 @@ public class CommentEntity extends AbstractEntity{
     @JoinColumn(name="fk_document_id")
     private DocumentEntity document;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="fk_user_id")
+    private UserEntity user;
+
     @Column
     private String text;
 
