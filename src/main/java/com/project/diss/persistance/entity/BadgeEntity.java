@@ -12,7 +12,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="badge")
-public class BadgeEntity extends AbstractEntity{
+public class BadgeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, updatable = false)
+    private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="fk_document_id")
@@ -21,4 +26,10 @@ public class BadgeEntity extends AbstractEntity{
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="fk_user_id")
     private UserEntity user;
+
+    @Column(name="progress_status")
+    private String progressStatus;
+
+    @Column(name="current_page")
+    private Integer currentPage;
 }

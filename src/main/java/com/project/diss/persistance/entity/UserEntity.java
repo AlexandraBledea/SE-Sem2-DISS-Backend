@@ -16,7 +16,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="user")
-public class UserEntity extends AbstractEntity{
+public class UserEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, updatable = false)
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String email;

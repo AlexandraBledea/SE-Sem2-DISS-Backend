@@ -9,13 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Table(name="company_document")
-public class CompanyDocumentEntity extends AbstractEntity{
+@PrimaryKeyJoinColumn(name="id")
+public class CompanyDocumentEntity extends DocumentEntity {
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name="fk_document_id")
-    private DocumentEntity document;
 }

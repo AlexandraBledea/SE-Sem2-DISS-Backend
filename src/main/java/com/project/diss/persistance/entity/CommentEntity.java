@@ -15,7 +15,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="comment")
-public class CommentEntity extends AbstractEntity{
+public class CommentEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, updatable = false)
+    private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="fk_document_id")

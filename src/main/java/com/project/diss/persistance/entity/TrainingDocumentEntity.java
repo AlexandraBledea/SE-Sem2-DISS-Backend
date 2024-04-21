@@ -12,15 +12,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="training_document")
-public class TrainingDocumentEntity extends AbstractEntity{
+@PrimaryKeyJoinColumn(name="id")
+public class TrainingDocumentEntity extends DocumentEntity{
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name="fk_document_id")
-    private DocumentEntity document;
+    @Column(name="required_points")
+    private Integer pointsRequired;
 
     @Column
-    private Integer points_required;
+    private Integer reward;
 
-    @Column Integer reward;
+    @Column(name="total_pages")
+    private Integer totalPages;
 }

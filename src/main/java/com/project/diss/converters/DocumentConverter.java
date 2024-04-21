@@ -1,10 +1,13 @@
 package com.project.diss.converters;
 
 import com.project.diss.controller.dto.EmployeeDocumentDto;
+import com.project.diss.controller.dto.TrainingDocumentDto;
 import com.project.diss.controller.dto.UserDto;
 import com.project.diss.persistance.entity.DocumentEntity;
 import com.project.diss.persistance.entity.EmployeeDocumentEntity;
+import com.project.diss.persistance.entity.TrainingDocumentEntity;
 import com.project.diss.persistance.entity.UserEntity;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 
 import javax.swing.plaf.PanelUI;
@@ -14,6 +17,61 @@ import java.util.List;
 @Component
 public class DocumentConverter {
 
+    public TrainingDocumentDto convertTrainingDocumentEntityToTrainingDocumentDto(TrainingDocumentEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        TrainingDocumentDto trainingDocument = new TrainingDocumentDto();
+
+        trainingDocument.setId(entity.getId());
+        trainingDocument.setTitle(entity.getTitle());
+        trainingDocument.setText(entity.getText());
+        trainingDocument.setDocument(entity.getDocument());
+        trainingDocument.setKeywords(entity.getKeywords());
+        trainingDocument.setCreated(entity.getCreated());
+        trainingDocument.setLastModified(entity.getLastModified());
+        trainingDocument.setPointsRequired(entity.getPointsRequired());
+        trainingDocument.setReward(entity.getReward());
+        trainingDocument.setTotalPages(entity.getTotalPages());
+        trainingDocument.setUserId(entity.getUser().getId());
+        return trainingDocument;
+    }
+
+    public TrainingDocumentEntity convertTrainingDocumentDtoToTrainingDocumentEntity(TrainingDocumentDto dto, UserEntity user) {
+        if (dto == null) {
+            return null;
+        }
+
+        TrainingDocumentEntity trainingDocument = new TrainingDocumentEntity();
+
+        trainingDocument.setId(dto.getId());
+        trainingDocument.setTitle(dto.getTitle());
+        trainingDocument.setText(dto.getText());
+        trainingDocument.setDocument(dto.getDocument());
+        trainingDocument.setKeywords(dto.getKeywords());
+        trainingDocument.setCreated(dto.getCreated());
+        trainingDocument.setLastModified(dto.getLastModified());
+        trainingDocument.setPointsRequired(dto.getPointsRequired());
+        trainingDocument.setTotalPages(dto.getTotalPages());
+        trainingDocument.setReward(dto.getReward());
+        trainingDocument.setUser(user);
+        return trainingDocument;
+    }
+
+    public List<TrainingDocumentDto> convertTrainingDocumentEntitiesToTrainingDocumentDtos(List<TrainingDocumentEntity> entities) {
+        if (entities == null) {
+            return null;
+        }
+
+        List<TrainingDocumentDto> list = new ArrayList<>(entities.size());
+        for (TrainingDocumentEntity trainingDocument : entities) {
+            list.add(convertTrainingDocumentEntityToTrainingDocumentDto(trainingDocument));
+        }
+
+        return list;
+    }
+
     public EmployeeDocumentDto convertEmployeeDocumentEntityToEmployeeDocumentDto(EmployeeDocumentEntity entity) {
         if (entity == null) {
             return null;
@@ -22,45 +80,33 @@ public class DocumentConverter {
         EmployeeDocumentDto employeeDocument = new EmployeeDocumentDto();
 
         employeeDocument.setId(entity.getId());
-        employeeDocument.setTitle(entity.getDocument().getTitle());
-        employeeDocument.setText(entity.getDocument().getText());
-        employeeDocument.setDocument(entity.getDocument().getDocument());
-        employeeDocument.setKeywords(entity.getDocument().getKeywords());
-        employeeDocument.setCreated(entity.getDocument().getCreated());
-        employeeDocument.setLastModified(entity.getDocument().getLastModified());
+        employeeDocument.setTitle(entity.getTitle());
+        employeeDocument.setText(entity.getText());
+        employeeDocument.setDocument(entity.getDocument());
+        employeeDocument.setKeywords(entity.getKeywords());
+        employeeDocument.setCreated(entity.getCreated());
+        employeeDocument.setLastModified(entity.getLastModified());
         employeeDocument.setVisibility(entity.getVisibility());
-        employeeDocument.setUserId(entity.getDocument().getUser().getId());
+        employeeDocument.setUserId(entity.getUser().getId());
         return employeeDocument;
     }
 
-    public DocumentEntity convertEmployeeDocumentDtoToDocumentEntity(EmployeeDocumentDto dto, UserEntity entity) {
-        if (dto == null) {
-            return null;
-        }
-
-        DocumentEntity document = new DocumentEntity();
-
-        document.setTitle(dto.getTitle());
-        document.setText(dto.getText());
-        document.setDocument(dto.getDocument());
-        document.setKeywords(dto.getKeywords());
-        document.setCreated(dto.getCreated());
-        document.setLastModified(dto.getLastModified());
-        document.setUser(entity);
-
-        return document;
-    }
-    public EmployeeDocumentEntity convertEmployeeDocumentDtoToEmployeeDocumentEntity(EmployeeDocumentDto dto, UserEntity entity) {
+    public EmployeeDocumentEntity convertEmployeeDocumentDtoToEmployeeDocumentEntity(EmployeeDocumentDto dto, UserEntity user) {
         if (dto == null) {
             return null;
         }
 
         EmployeeDocumentEntity employeeDocument = new EmployeeDocumentEntity();
-        DocumentEntity document = convertEmployeeDocumentDtoToDocumentEntity(dto, entity);
 
         employeeDocument.setId(dto.getId());
-        employeeDocument.setDocument(document);
+        employeeDocument.setTitle(dto.getTitle());
+        employeeDocument.setText(dto.getText());
+        employeeDocument.setDocument(dto.getDocument());
+        employeeDocument.setKeywords(dto.getKeywords());
+        employeeDocument.setCreated(dto.getCreated());
+        employeeDocument.setLastModified(dto.getLastModified());
         employeeDocument.setVisibility(dto.isVisibility());
+        employeeDocument.setUser(user);
         return employeeDocument;
     }
 

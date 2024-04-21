@@ -26,4 +26,14 @@
     <changeSet id="20240413-company-document-003" author="alebledea">
         <addAutoIncrement tableName="company_document" columnName="id"/>
     </changeSet>
+
+    <changeSet id="20240421-company-document-004" author="alebledea">
+        <addForeignKeyConstraint
+                baseTableName="company_document"
+                baseColumnNames="id"
+                constraintName="fk_company_document_id"
+                referencedTableName="document"
+                referencedColumnNames="id"/>
+        <dropColumn tableName="company_document" columnName="fk_document_id"/>
+    </changeSet>
 </databaseChangeLog>

@@ -33,4 +33,29 @@
     <changeSet id="20240413-badge-003" author="alebledea">
         <addAutoIncrement tableName="badge" columnName="id"/>
     </changeSet>
+
+    <changeSet id="20240413-badge-004" author="alebledea">
+        <addColumn tableName="badge">
+            <column name="progressStatus" type="varchar">
+            </column>
+        </addColumn>
+        <addColumn tableName="badge">
+            <column name="currentPage" type="int">
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20240413-badge-005" author="alebledea">
+        <dropColumn tableName="badge" columnName="progressStatus"/>
+        <dropColumn tableName="badge" columnName="currentPage"/>
+        <addColumn tableName="badge">
+            <column name="progress_status" type="varchar">
+            </column>
+        </addColumn>
+        <addColumn tableName="badge">
+            <column name="current_page" type="int">
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

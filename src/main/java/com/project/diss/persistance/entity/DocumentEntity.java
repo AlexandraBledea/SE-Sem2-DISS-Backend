@@ -17,7 +17,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "document")
-public class DocumentEntity extends AbstractEntity {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class DocumentEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, updatable = false)
+    private Long id;
 
     @Column(nullable = false)
     private String title;

@@ -12,12 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="employee_document")
-public class EmployeeDocumentEntity extends AbstractEntity{
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name="fk_document_id")
-    private DocumentEntity document;
+@PrimaryKeyJoinColumn(name="id")
+public class EmployeeDocumentEntity extends DocumentEntity {
 
     @Column
     private Boolean visibility;

@@ -29,4 +29,28 @@
         <addAutoIncrement tableName="training_document" columnName="id"/>
     </changeSet>
 
+    <changeSet id="20240421-training-document-004" author="alebledea">
+        <addForeignKeyConstraint
+                baseTableName="training_document"
+                baseColumnNames="id"
+                constraintName="fk_training_document_id"
+                referencedTableName="document"
+                referencedColumnNames="id"/>
+        <dropColumn tableName="training_document" columnName="fk_document_id"/>
+    </changeSet>
+
+    <changeSet id="20240421-training-document-005" author="alebledea">
+        <addColumn tableName="training_document">
+            <column name="totalPages" type="int">
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20240421-training-document-006" author="alebledea">
+        <dropColumn tableName="training_document" columnName="totalPages"/>
+        <addColumn tableName="training_document">
+            <column name="total_pages" type="int">
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
