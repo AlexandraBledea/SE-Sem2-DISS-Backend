@@ -15,5 +15,4 @@ public class AbstractEntity {
     @Column(unique = true, updatable = false)
     private Long id;
 
-
 }

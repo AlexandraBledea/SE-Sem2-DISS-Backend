@@ -24,7 +24,7 @@ import java.util.Optional;
 @Slf4j
 public class JwtTokenService {
 
-    private static final long EXPIRATION_TIME = Duration.ofMinutes(2).toMillis();
+    private static final long EXPIRATION_TIME = Duration.ofHours(4).toMillis();
     private static final String HEADER_STRING = "Authorization";
     private static final String CLAIM_USER = "email";
     private static final String CLAIM_ID = "id";

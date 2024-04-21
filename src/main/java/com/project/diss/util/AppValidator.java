@@ -1,6 +1,7 @@
 package com.project.diss.util;
 
 import com.project.diss.controller.dto.CreateUserDto;
+import com.project.diss.controller.dto.EmployeeDocumentDto;
 import com.project.diss.controller.dto.LoginUserDto;
 import com.project.diss.persistance.entity.enums.UserType;
 import lombok.AccessLevel;
@@ -80,5 +81,9 @@ public class AppValidator {
         }
 
         return valid;
+    }
+
+    public static boolean validateEmployeeDocumentCreation(EmployeeDocumentDto employeeDocumentDto) {
+        return true;
     }
 }

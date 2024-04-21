@@ -25,7 +25,7 @@ public class DocumentEntity extends AbstractEntity {
     @Column(nullable = false)
     private String text;
 
-    @Column
+    @Column(name="file")
     private byte[] document;
 
     @Column
