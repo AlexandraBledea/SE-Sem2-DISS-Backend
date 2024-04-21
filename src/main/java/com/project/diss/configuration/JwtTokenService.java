@@ -29,6 +29,7 @@ public class JwtTokenService {
     private static final String CLAIM_USER = "email";
     private static final String CLAIM_ID = "id";
     private static final String CLAIM_TYPE = "type";
+    private static final String CLAIM_USER_INITIALS = "initials";
     @Value("${application.secret}")
     private String secret;
 
@@ -47,6 +48,14 @@ public class JwtTokenService {
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
                     .parseClaimsJws(token);
+
+            //Checks if there are the initials present
+            String userInitials = Optional.ofNullable(claims.getBody().get(CLAIM_USER_INITIALS))
+                    .map(Object::toString)
+                    .orElseThrow(() -> {
+                        log.error("JWT token does not contain user initials");
+                        return new AuthenticationCredentialsNotFoundException("No user initials given in jwt");
+                    });
 
             //Checks if there is an email present
             String email = Optional.ofNullable(claims.getBody().get(CLAIM_USER))
@@ -96,7 +105,7 @@ public class JwtTokenService {
         return auth;
     }
 
-    public String createJwtToken(final String email, final UserType type, final Long id) {
+    public String createJwtToken(final String email, final UserType type, final Long id, final String initials) {
         // Create the jwt token
         String jwtToken;
 
@@ -104,6 +113,7 @@ public class JwtTokenService {
                 .claim(CLAIM_USER, email)//
                 .claim(CLAIM_TYPE, type)//
                 .claim(CLAIM_ID, id)
+                .claim(CLAIM_USER_INITIALS, initials)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))//
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes(StandardCharsets.UTF_8))//
                 .compact();//

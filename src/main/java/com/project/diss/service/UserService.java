@@ -9,6 +9,7 @@ import com.project.diss.exception.AuthenticationException;
 import com.project.diss.exception.ConflictException;
 import com.project.diss.persistance.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,10 @@ public class UserService {
         this.userConverter = userConverter;
     }
 
+    private String createUserInitials(UserEntity user) {
+        return user.getFirstname().charAt(0) + "" + user.getLastname().charAt(0);
+    }
+
     public Token createJwtForUser(String email, String password) throws AuthenticationException {
         UserEntity user = getUserInformation(email);
         if (user == null) {
@@ -47,7 +52,7 @@ public class UserService {
         }
 
         Token token = new Token();
-        token.setToken(jwtTokenService.createJwtToken(user.getEmail(), user.getType(), user.getId()));
+        token.setToken(jwtTokenService.createJwtToken(user.getEmail(), user.getType(), user.getId(), createUserInitials(user)));
         log.info("JWT token generated successfully for user '{}'.", email);
         return token;
     }

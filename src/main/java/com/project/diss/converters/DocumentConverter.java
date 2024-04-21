@@ -2,15 +2,11 @@ package com.project.diss.converters;
 
 import com.project.diss.controller.dto.EmployeeDocumentDto;
 import com.project.diss.controller.dto.TrainingDocumentDto;
-import com.project.diss.controller.dto.UserDto;
-import com.project.diss.persistance.entity.DocumentEntity;
 import com.project.diss.persistance.entity.EmployeeDocumentEntity;
 import com.project.diss.persistance.entity.TrainingDocumentEntity;
 import com.project.diss.persistance.entity.UserEntity;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 
-import javax.swing.plaf.PanelUI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +84,7 @@ public class DocumentConverter {
         employeeDocument.setLastModified(entity.getLastModified());
         employeeDocument.setVisibility(entity.getVisibility());
         employeeDocument.setUserId(entity.getUser().getId());
+        employeeDocument.setUserInitials(entity.getUser().getFirstname().charAt(0) + "" + entity.getUser().getLastname().charAt(0));
         return employeeDocument;
     }
 

@@ -4,6 +4,7 @@ import com.project.diss.controller.dto.EmployeeDocumentDto;
 import com.project.diss.controller.dto.TrainingDocumentDto;
 import com.project.diss.converters.DocumentConverter;
 import com.project.diss.exception.CustomException;
+import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.persistance.DocumentRepository;
 import com.project.diss.persistance.EmployeeDocumentRepository;
 import com.project.diss.persistance.TrainingDocumentRepository;
@@ -41,7 +42,7 @@ public class DocumentService {
         this.trainingDocumentRepository = trainingDocumentRepository;
     }
 
-    public TrainingDocumentDto createTrainingDocument(TrainingDocumentDto trainingDocument) throws CustomException {
+    public TrainingDocumentDto createTrainingDocument(TrainingDocumentDto trainingDocument) throws EntityNotFoundException {
         log.info("Creating training document: {}", trainingDocument);
         Optional<UserEntity> user = userRepository.findById(trainingDocument.getUserId());
         if (user.isPresent()) {
@@ -50,7 +51,7 @@ public class DocumentService {
             return documentConverter.convertTrainingDocumentEntityToTrainingDocumentDto(trainingDocumentEntity);
         }
         log.error("Could not save database entry because user with id {} doesn't exist", trainingDocument.getUserId());
-        throw new CustomException("USER NOT FOUND", "Cannot create training document!");
+        throw new EntityNotFoundException();
     }
 
     public List<TrainingDocumentDto> getTrainingDocuments() {
@@ -58,7 +59,7 @@ public class DocumentService {
         return documentConverter.convertTrainingDocumentEntitiesToTrainingDocumentDtos(trainingDocumentEntities);
     }
 
-    public EmployeeDocumentDto createEmployeeDocument(EmployeeDocumentDto employeeDocument) throws CustomException {
+    public EmployeeDocumentDto createEmployeeDocument(EmployeeDocumentDto employeeDocument) throws EntityNotFoundException {
         log.info("Creating employee document: {}", employeeDocument);
         Optional<UserEntity> user = userRepository.findById(employeeDocument.getUserId());
         if (user.isPresent()) {
@@ -67,10 +68,10 @@ public class DocumentService {
             return documentConverter.convertEmployeeDocumentEntityToEmployeeDocumentDto(employeeDocumentEntity);
         }
         log.error("Could not save database entry because user with id {} doesn't exist", employeeDocument.getUserId());
-        throw new CustomException("USER NOT FOUND", "Cannot create personal document!");
+        throw new EntityNotFoundException();
     }
 
-    public List<EmployeeDocumentDto> getEmployeeOwnDocuments(Long id) throws CustomException {
+    public List<EmployeeDocumentDto> getEmployeeOwnDocuments(Long id) throws EntityNotFoundException {
         Optional<UserEntity> user = userRepository.findById(id);
         if (user.isPresent()) {
             List<DocumentEntity> documents = user.get().getDocuments();
@@ -78,10 +79,10 @@ public class DocumentService {
             return documentConverter.convertEmployeeDocumentEntitiesToEmployeeDocumentDtos(employeeDocumentEntities);
         }
         log.error("Could not retrieve employee documents for user with id {}", id);
-        throw new CustomException("USER NOT FOUND", "Cannot retrieve personal documents!");
+        throw new EntityNotFoundException();
     }
 
-    public List<EmployeeDocumentDto> getEmployeeDocuments(Long id) throws CustomException{
+    public List<EmployeeDocumentDto> getEmployeeDocuments(Long id) throws EntityNotFoundException {
         List<DocumentEntity> documents = documentRepository.findAll();
         List<EmployeeDocumentDto> employeeDocumentEntities = documentConverter
                 .convertEmployeeDocumentEntitiesToEmployeeDocumentDtos(documents.stream()
@@ -93,5 +94,23 @@ public class DocumentService {
         employeeDocumentEntities.addAll(employeeOwnDocumentEntities);
         employeeDocumentEntities.sort((o1, o2) -> o2.getLastModified().compareTo(o1.getLastModified()));
         return employeeDocumentEntities;
+    }
+
+    public EmployeeDocumentDto getEmployeeDocument(Long id) throws EntityNotFoundException {
+        Optional<EmployeeDocumentEntity> employeeDocumentEntity = employeeDocumentRepository.findById(id);
+        if (employeeDocumentEntity.isPresent()) {
+            return documentConverter.convertEmployeeDocumentEntityToEmployeeDocumentDto(employeeDocumentEntity.get());
+        }
+        log.error("Could not retrieve employee document with id {}", id);
+        throw new EntityNotFoundException();
+    }
+
+    public void deleteEmployeeDocument(Long id) throws EntityNotFoundException {
+        Optional<EmployeeDocumentEntity> employeeDocumentEntity = employeeDocumentRepository.findById(id);
+        if(employeeDocumentEntity.isEmpty()){
+            log.info("Could not find employee document with id {}", id);
+            throw new EntityNotFoundException();
+        }
+        employeeDocumentRepository.deleteById(id);
     }
 }
