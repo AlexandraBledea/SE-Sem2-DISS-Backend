@@ -22,11 +22,11 @@ public class CommentEntity {
     @Column(unique = true, updatable = false)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="fk_document_id")
     private DocumentEntity document;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="fk_user_id")
     private UserEntity user;
 

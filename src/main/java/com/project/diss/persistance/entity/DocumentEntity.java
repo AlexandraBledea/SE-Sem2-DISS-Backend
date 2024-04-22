@@ -45,7 +45,7 @@ public class DocumentEntity {
     private LocalDateTime lastModified;
 
     //TODO modify the cascade type, because deleting a document => deleting the user and that's not what we want
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "fk_user_id")
     private UserEntity user;
 

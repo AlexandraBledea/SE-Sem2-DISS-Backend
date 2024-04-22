@@ -31,6 +31,8 @@ public class DocumentConverter {
         trainingDocument.setReward(entity.getReward());
         trainingDocument.setTotalPages(entity.getTotalPages());
         trainingDocument.setUserId(entity.getUser().getId());
+        trainingDocument.setUserFirstname(entity.getUser().getFirstname());
+        trainingDocument.setUserLastname(entity.getUser().getLastname());
         return trainingDocument;
     }
 
@@ -84,7 +86,8 @@ public class DocumentConverter {
         employeeDocument.setLastModified(entity.getLastModified());
         employeeDocument.setVisibility(entity.getVisibility());
         employeeDocument.setUserId(entity.getUser().getId());
-        employeeDocument.setUserInitials(entity.getUser().getFirstname().charAt(0) + "" + entity.getUser().getLastname().charAt(0));
+        employeeDocument.setUserFirstname(entity.getUser().getFirstname());
+        employeeDocument.setUserLastname(entity.getUser().getLastname());
         return employeeDocument;
     }
 

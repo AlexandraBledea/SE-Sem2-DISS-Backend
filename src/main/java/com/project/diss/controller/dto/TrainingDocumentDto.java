@@ -18,4 +18,6 @@ public class TrainingDocumentDto {
     private Integer reward;
     private Integer totalPages;
     private Long userId;
+    private String userFirstname;
+    private String userLastname;
 }

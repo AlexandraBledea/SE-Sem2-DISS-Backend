@@ -14,5 +14,6 @@ public class EmployeeDocumentDto {
     private LocalDateTime lastModified;
     private boolean visibility;
     private Long userId;
-    private String userInitials;
+    private String userFirstname;
+    private String userLastname;
 }
