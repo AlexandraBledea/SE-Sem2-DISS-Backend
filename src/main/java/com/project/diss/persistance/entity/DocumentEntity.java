@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,10 +38,7 @@ public class DocumentEntity {
     @Column
     private String keywords;
 
-    @CreationTimestamp
-    @Column(name = "creation_date")
-    private LocalDateTime created;
-
+    @UpdateTimestamp
     @Column(name = "last_modified")
     private LocalDateTime lastModified;
 

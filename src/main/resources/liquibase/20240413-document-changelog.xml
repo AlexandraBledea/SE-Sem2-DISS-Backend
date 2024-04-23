@@ -38,4 +38,7 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20240424-document-005" author="alebledea">
+        <dropColumn tableName="document" columnName="creation_date"/>
+    </changeSet>
 </databaseChangeLog>

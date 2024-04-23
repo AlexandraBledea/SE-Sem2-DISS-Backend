@@ -10,7 +10,6 @@ public class EmployeeDocumentDto {
     private String text;
     private byte[] document;
     private String keywords;
-    private LocalDateTime created;
     private LocalDateTime lastModified;
     private boolean visibility;
     private Long userId;

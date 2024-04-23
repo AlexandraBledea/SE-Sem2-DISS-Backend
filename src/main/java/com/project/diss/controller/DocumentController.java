@@ -31,6 +31,8 @@ public class DocumentController {
     public static final String GET_DOCUMENTS_SUB_PATH = "/get-documents";
     public static final String GET_DOCUMENT_SUB_PATH = "/get-document";
 
+    public static final String UPDATE_DOCUMENT_SUB_PATH = "/update-document";
+
     public final DocumentService documentService;
 
     @Autowired
@@ -104,6 +106,14 @@ public class DocumentController {
         documentService.deleteEmployeeDocument(id);
         ResponseEntity<Object> response = ResponseEntity.ok().build();
         log.info("End: Delete employee document. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
+
+    @PutMapping(value = EMPLOYEE_DOCUMENT_BASE_URL + UPDATE_DOCUMENT_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<EmployeeDocumentDto> updateEmployeeDocument(@RequestBody EmployeeDocumentDto employeeDocument) throws EntityNotFoundException {
+        log.info("Start: Update employee document. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<EmployeeDocumentDto> response = ResponseEntity.ok(documentService.updateEmployeeDocument(employeeDocument));
+        log.info("End: Update employee document. Timestamp: {}", LocalDateTime.now());
         return response;
     }
 

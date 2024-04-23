@@ -12,7 +12,6 @@ public class TrainingDocumentDto {
     private String text;
     private byte[] document;
     private String keywords;
-    private LocalDateTime created;
     private LocalDateTime lastModified;
     private Integer pointsRequired;
     private Integer reward;

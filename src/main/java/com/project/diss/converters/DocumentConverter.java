@@ -25,7 +25,6 @@ public class DocumentConverter {
         trainingDocument.setText(entity.getText());
         trainingDocument.setDocument(entity.getDocument());
         trainingDocument.setKeywords(entity.getKeywords());
-        trainingDocument.setCreated(entity.getCreated());
         trainingDocument.setLastModified(entity.getLastModified());
         trainingDocument.setPointsRequired(entity.getPointsRequired());
         trainingDocument.setReward(entity.getReward());
@@ -48,7 +47,6 @@ public class DocumentConverter {
         trainingDocument.setText(dto.getText());
         trainingDocument.setDocument(dto.getDocument());
         trainingDocument.setKeywords(dto.getKeywords());
-        trainingDocument.setCreated(dto.getCreated());
         trainingDocument.setLastModified(dto.getLastModified());
         trainingDocument.setPointsRequired(dto.getPointsRequired());
         trainingDocument.setTotalPages(dto.getTotalPages());
@@ -82,7 +80,6 @@ public class DocumentConverter {
         employeeDocument.setText(entity.getText());
         employeeDocument.setDocument(entity.getDocument());
         employeeDocument.setKeywords(entity.getKeywords());
-        employeeDocument.setCreated(entity.getCreated());
         employeeDocument.setLastModified(entity.getLastModified());
         employeeDocument.setVisibility(entity.getVisibility());
         employeeDocument.setUserId(entity.getUser().getId());
@@ -103,7 +100,6 @@ public class DocumentConverter {
         employeeDocument.setText(dto.getText());
         employeeDocument.setDocument(dto.getDocument());
         employeeDocument.setKeywords(dto.getKeywords());
-        employeeDocument.setCreated(dto.getCreated());
         employeeDocument.setLastModified(dto.getLastModified());
         employeeDocument.setVisibility(dto.isVisibility());
         employeeDocument.setUser(user);

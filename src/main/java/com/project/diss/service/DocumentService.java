@@ -3,7 +3,6 @@ package com.project.diss.service;
 import com.project.diss.controller.dto.EmployeeDocumentDto;
 import com.project.diss.controller.dto.TrainingDocumentDto;
 import com.project.diss.converters.DocumentConverter;
-import com.project.diss.exception.CustomException;
 import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.persistance.DocumentRepository;
 import com.project.diss.persistance.EmployeeDocumentRepository;
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -112,5 +110,15 @@ public class DocumentService {
             throw new EntityNotFoundException();
         }
         employeeDocumentRepository.deleteById(id);
+    }
+
+    public EmployeeDocumentDto updateEmployeeDocument(EmployeeDocumentDto employeeDocument) throws EntityNotFoundException {
+        Optional<EmployeeDocumentEntity> employeeDocumentEntity = employeeDocumentRepository.findById(employeeDocument.getId());
+        if(employeeDocumentEntity.isEmpty()){
+            log.info("Could not find employee document with id {}", employeeDocument.getId());
+            throw new EntityNotFoundException();
+        }
+        EmployeeDocumentEntity updatedEmployeeDocumentEntity = documentConverter.convertEmployeeDocumentDtoToEmployeeDocumentEntity(employeeDocument, employeeDocumentEntity.get().getUser());
+        return documentConverter.convertEmployeeDocumentEntityToEmployeeDocumentDto(employeeDocumentRepository.save(updatedEmployeeDocumentEntity));
     }
 }
