@@ -41,4 +41,21 @@
     <changeSet id="20240424-document-005" author="alebledea">
         <dropColumn tableName="document" columnName="creation_date"/>
     </changeSet>
+
+    <changeSet id="20240425-document-006" author="alebledea">
+        <addColumn tableName="document">
+            <column name="file_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="fk_file_id" references="file(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20240425-document-007" author="alebledea">
+        <dropColumn tableName="document" columnName="file_id"/>
+        <addColumn tableName="document">
+            <column name="fk_file_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="fk_file_id" references="file(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

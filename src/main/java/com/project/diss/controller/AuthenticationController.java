@@ -1,7 +1,7 @@
 package com.project.diss.controller;
 
-import com.project.diss.controller.dto.LoginUserDto;
-import com.project.diss.controller.dto.Token;
+import com.project.diss.dto.LoginUserDto;
+import com.project.diss.dto.Token;
 import com.project.diss.exception.AuthenticationException;
 import com.project.diss.exception.RequestNotValidException;
 import com.project.diss.service.UserService;

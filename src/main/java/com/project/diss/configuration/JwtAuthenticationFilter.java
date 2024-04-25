@@ -2,7 +2,7 @@ package com.project.diss.configuration;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.diss.controller.dto.ErrorResponse;
+import com.project.diss.dto.ErrorResponse;
 import com.project.diss.exception.JwtTokenException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

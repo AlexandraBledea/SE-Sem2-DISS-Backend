@@ -1,10 +1,9 @@
 package com.project.diss.util;
 
-import com.project.diss.controller.dto.CreateUserDto;
-import com.project.diss.controller.dto.EmployeeDocumentDto;
-import com.project.diss.controller.dto.LoginUserDto;
-import com.project.diss.controller.dto.TrainingDocumentDto;
-import com.project.diss.persistance.entity.enums.UserType;
+import com.project.diss.dto.SaveEmployeeDocumentDto;
+import com.project.diss.dto.SaveTrainingDocumentDto;
+import com.project.diss.dto.SaveUserDto;
+import com.project.diss.dto.LoginUserDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,38 +44,38 @@ public class AppValidator {
         return valid;
     }
 
-    public static boolean validateUserCreation(CreateUserDto createUserDto) {
+    public static boolean validateUserCreation(SaveUserDto saveUserDto) {
         boolean valid = true;
-        if (createUserDto == null) {
+        if (saveUserDto == null) {
             log.error("User object is null.");
             valid = false;
-        } else if (!validateEmail(createUserDto.getEmail())) {
+        } else if (!validateEmail(saveUserDto.getEmail())) {
             valid = false;
-        } else if (createUserDto.getFirstname() == null || createUserDto.getFirstname().isEmpty()) {
+        } else if (saveUserDto.getFirstname() == null || saveUserDto.getFirstname().isEmpty()) {
             log.error("Firstname is null or empty.");
             valid = false;
-        } else if (createUserDto.getLastname() == null || createUserDto.getLastname().isEmpty()) {
+        } else if (saveUserDto.getLastname() == null || saveUserDto.getLastname().isEmpty()) {
             log.error("Lastname is null or empty.");
             valid = false;
-        } else if (createUserDto.getPassword() == null || createUserDto.getPassword().isEmpty()) {
+        } else if (saveUserDto.getPassword() == null || saveUserDto.getPassword().isEmpty()) {
             log.error("Password is null or empty.");
             valid = false;
-        } else if (createUserDto.getRole() == null || createUserDto.getRole().isEmpty()) {
+        } else if (saveUserDto.getRole() == null || saveUserDto.getRole().isEmpty()) {
             log.error("Role is null or empty.");
             valid = false;
-        } else if (createUserDto.getDepartment() == null || createUserDto.getDepartment().isEmpty()) {
+        } else if (saveUserDto.getDepartment() == null || saveUserDto.getDepartment().isEmpty()) {
             log.error("Department is null or empty.");
             valid = false;
-        } else if (createUserDto.getLocation() == null || createUserDto.getLocation().isEmpty()) {
+        } else if (saveUserDto.getLocation() == null || saveUserDto.getLocation().isEmpty()) {
             log.error("Location is null or empty.");
             valid = false;
-        } else if (createUserDto.getLevel() == null || createUserDto.getLevel() < 0) {
+        } else if (saveUserDto.getLevel() == null || saveUserDto.getLevel() < 0) {
             log.error("Level is null or negative.");
             valid = false;
-        } else if (createUserDto.getPoints() == null || createUserDto.getPoints() < 0) {
+        } else if (saveUserDto.getPoints() == null || saveUserDto.getPoints() < 0) {
             log.error("Points is null or negative.");
             valid = false;
-        } else if (createUserDto.getType() == null || createUserDto.getType().name().isEmpty()) {
+        } else if (saveUserDto.getType() == null || saveUserDto.getType().name().isEmpty()) {
             log.error("User type is null or empty.");
             valid = false;
         }
@@ -84,11 +83,13 @@ public class AppValidator {
         return valid;
     }
 
-    public static boolean validateEmployeeDocumentCreation(EmployeeDocumentDto employeeDocumentDto) {
+    public static boolean validateEmployeeDocumentCreation(SaveEmployeeDocumentDto employeeDocumentDto) {
+        //TODO - add validations
         return true;
     }
 
-    public static boolean validateTrainingDocumentCreation(TrainingDocumentDto trainingDocumentDto) {
+    public static boolean validateTrainingDocumentCreation(SaveTrainingDocumentDto trainingDocumentDto) {
+        //TODO - add validations
         return true;
     }
 }

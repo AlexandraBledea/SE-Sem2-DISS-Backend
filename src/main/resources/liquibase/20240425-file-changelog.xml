@@ -1,0 +1,28 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="20240425-file-001" author="alebledea">
+        <createTable tableName="file">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="buffer" type="bytea"/>
+            <column name="title" type="varchar(255)"/>
+            <column name="type" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20240425-file-002" author="alebledea">
+            <dropColumn tableName="file" columnName="title"/>
+            <addColumn tableName="file">
+                <column name="name" type="varchar"/>
+            </addColumn>
+    </changeSet>
+
+    <changeSet id="20240425-file-003" author="alebledea">
+        <addAutoIncrement tableName="file" columnName="id"/>
+    </changeSet>
+
+</databaseChangeLog>

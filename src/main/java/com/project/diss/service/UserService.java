@@ -1,15 +1,14 @@
 package com.project.diss.service;
 
 import com.project.diss.configuration.JwtTokenService;
-import com.project.diss.controller.dto.CreateUserDto;
-import com.project.diss.controller.dto.Token;
-import com.project.diss.controller.dto.UserDto;
+import com.project.diss.dto.SaveUserDto;
+import com.project.diss.dto.Token;
+import com.project.diss.dto.UserDto;
 import com.project.diss.converters.UserConverter;
 import com.project.diss.exception.AuthenticationException;
 import com.project.diss.exception.ConflictException;
 import com.project.diss.persistance.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -62,8 +61,8 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public UserDto createUser(CreateUserDto dto) throws ConflictException {
-        UserEntity user = userConverter.convertCreateUserDtoToUserEntity(dto);
+    public UserDto createUser(SaveUserDto dto) throws ConflictException {
+        UserEntity user = userConverter.convertSaveUserDtoToUserEntity(dto);
         if(getUserInformation(user.getEmail()) != null) {
             log.error("Could not save database entry because user with email '{}' already exists.", user.getEmail());
             throw new ConflictException();

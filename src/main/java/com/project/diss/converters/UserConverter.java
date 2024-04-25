@@ -1,7 +1,7 @@
 package com.project.diss.converters;
 
-import com.project.diss.controller.dto.CreateUserDto;
-import com.project.diss.controller.dto.UserDto;
+import com.project.diss.dto.SaveUserDto;
+import com.project.diss.dto.UserDto;
 import com.project.diss.persistance.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,19 +19,19 @@ public class UserConverter {
     public UserConverter(BCryptPasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
-    public UserEntity convertCreateUserDtoToUserEntity(CreateUserDto createUserDto) {
+    public UserEntity convertSaveUserDtoToUserEntity(SaveUserDto saveUserDto) {
         UserEntity user = new UserEntity();
-        user.setEmail(createUserDto.getEmail());
-        user.setPassword(passwordEncoder.encode(createUserDto.getPassword()));
-        user.setFirstname(createUserDto.getFirstname());
-        user.setLastname(createUserDto.getLastname());
-        user.setPhoneNumber(createUserDto.getPhoneNumber());
-        user.setRole(createUserDto.getRole());
-        user.setDepartment(createUserDto.getDepartment());
-        user.setLocation(createUserDto.getLocation());
-        user.setLevel(createUserDto.getLevel());
-        user.setPoints(createUserDto.getPoints());
-        user.setType(createUserDto.getType());
+        user.setEmail(saveUserDto.getEmail());
+        user.setPassword(passwordEncoder.encode(saveUserDto.getPassword()));
+        user.setFirstname(saveUserDto.getFirstname());
+        user.setLastname(saveUserDto.getLastname());
+        user.setPhoneNumber(saveUserDto.getPhoneNumber());
+        user.setRole(saveUserDto.getRole());
+        user.setDepartment(saveUserDto.getDepartment());
+        user.setLocation(saveUserDto.getLocation());
+        user.setLevel(saveUserDto.getLevel());
+        user.setPoints(saveUserDto.getPoints());
+        user.setType(saveUserDto.getType());
         return user;
     }
 

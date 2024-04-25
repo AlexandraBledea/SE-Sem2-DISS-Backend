@@ -1,7 +1,7 @@
 package com.project.diss.controller;
 
-import com.project.diss.controller.dto.CreateUserDto;
-import com.project.diss.controller.dto.UserDto;
+import com.project.diss.dto.SaveUserDto;
+import com.project.diss.dto.UserDto;
 import com.project.diss.exception.ConflictException;
 import com.project.diss.exception.RequestNotValidException;
 import com.project.diss.service.UserService;
@@ -32,7 +32,7 @@ public class AdminController {
 
     @AllowAdmin
     @PostMapping(value = ADMIN_BASE_URL + CREATE_ACCOUNT_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDto> createAccount(@RequestBody CreateUserDto user) throws ConflictException, RequestNotValidException {
+    public ResponseEntity<UserDto> createAccount(@RequestBody SaveUserDto user) throws ConflictException, RequestNotValidException {
         log.info("Start: Create account. Timestamp: {}", LocalDateTime.now());
         ResponseEntity<UserDto> response;
         if (!validateUserCreation(user)) {

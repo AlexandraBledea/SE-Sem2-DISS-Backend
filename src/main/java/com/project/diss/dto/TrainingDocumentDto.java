@@ -1,6 +1,5 @@
-package com.project.diss.controller.dto;
+package com.project.diss.dto;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,13 +9,11 @@ public class TrainingDocumentDto {
     private Long id;
     private String title;
     private String text;
-    private byte[] document;
     private String keywords;
     private LocalDateTime lastModified;
     private Integer pointsRequired;
     private Integer reward;
     private Integer totalPages;
-    private Long userId;
-    private String userFirstname;
-    private String userLastname;
+    private UserDto user; //TODO - create another DTO for user only with necessary fields and use it here
+    private FileDto file;
 }

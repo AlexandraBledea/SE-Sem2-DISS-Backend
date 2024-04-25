@@ -1,18 +1,16 @@
-package com.project.diss.controller.dto;
+package com.project.diss.dto;
 
 import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Data
-public class EmployeeDocumentDto {
+public class SaveEmployeeDocumentDto {
     private Long id;
     private String title;
     private String text;
-    private byte[] document;
     private String keywords;
-    private LocalDateTime lastModified;
     private boolean visibility;
     private Long userId;
-    private String userFirstname;
-    private String userLastname;
+    private FileDto file;
 }

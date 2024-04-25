@@ -1,4 +1,4 @@
-package com.project.diss.controller.dto;
+package com.project.diss.dto;
 
 import com.project.diss.persistance.entity.enums.UserType;
 import lombok.Data;

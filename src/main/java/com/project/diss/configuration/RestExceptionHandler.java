@@ -1,6 +1,6 @@
 package com.project.diss.configuration;
 
-import com.project.diss.controller.dto.ErrorResponse;
+import com.project.diss.dto.ErrorResponse;
 import com.project.diss.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;

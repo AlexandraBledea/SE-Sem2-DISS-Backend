@@ -1,16 +1,18 @@
 package com.project.diss.service;
 
-import com.project.diss.controller.dto.EmployeeDocumentDto;
-import com.project.diss.controller.dto.TrainingDocumentDto;
-import com.project.diss.converters.DocumentConverter;
+import com.project.diss.converters.FileConverter;
+import com.project.diss.dto.EmployeeDocumentDto;
+import com.project.diss.converters.EmployeeDocumentConverter;
+import com.project.diss.dto.FileDto;
+import com.project.diss.dto.SaveEmployeeDocumentDto;
 import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.persistance.DocumentRepository;
 import com.project.diss.persistance.EmployeeDocumentRepository;
-import com.project.diss.persistance.TrainingDocumentRepository;
+import com.project.diss.persistance.FileRepository;
 import com.project.diss.persistance.UserRepository;
 import com.project.diss.persistance.entity.DocumentEntity;
 import com.project.diss.persistance.entity.EmployeeDocumentEntity;
-import com.project.diss.persistance.entity.TrainingDocumentEntity;
+import com.project.diss.persistance.entity.FileEntity;
 import com.project.diss.persistance.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,47 +23,50 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class DocumentService {
+public class EmployeeDocumentService {
+
 
     UserRepository userRepository;
     DocumentRepository documentRepository;
+    FileRepository fileRepository;
     EmployeeDocumentRepository employeeDocumentRepository;
 
-    TrainingDocumentRepository trainingDocumentRepository;
-
-    DocumentConverter documentConverter;
+    EmployeeDocumentConverter documentConverter;
+    FileConverter fileConverter;
 
     @Autowired
-    public DocumentService(UserRepository userRepository, DocumentRepository documentRepository, EmployeeDocumentRepository employeeDocumentRepository, TrainingDocumentRepository trainingDocumentRepository, DocumentConverter documentConverter) {
+    public EmployeeDocumentService(UserRepository userRepository, DocumentRepository documentRepository,
+                                   EmployeeDocumentRepository employeeDocumentRepository, FileRepository fileRepository,
+                                   EmployeeDocumentConverter documentConverter, FileConverter fileConverter) {
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.employeeDocumentRepository = employeeDocumentRepository;
         this.documentConverter = documentConverter;
-        this.trainingDocumentRepository = trainingDocumentRepository;
+        this.fileConverter = fileConverter;
+        this.fileRepository = fileRepository;
     }
 
-    public TrainingDocumentDto createTrainingDocument(TrainingDocumentDto trainingDocument) throws EntityNotFoundException {
-        log.info("Creating training document: {}", trainingDocument);
-        Optional<UserEntity> user = userRepository.findById(trainingDocument.getUserId());
-        if (user.isPresent()) {
-            TrainingDocumentEntity trainingDocumentEntity = documentConverter.convertTrainingDocumentDtoToTrainingDocumentEntity(trainingDocument, user.get());
-            trainingDocumentEntity = trainingDocumentRepository.save(trainingDocumentEntity);
-            return documentConverter.convertTrainingDocumentEntityToTrainingDocumentDto(trainingDocumentEntity);
+    public FileEntity saveFile(FileDto fileDto) {
+        if (fileDto == null) {
+            return null;
+        } else {
+            FileEntity fileEntity = fileConverter.convertFileDtoToFileEntity(fileDto);
+            return fileRepository.save(fileEntity);
         }
-        log.error("Could not save database entry because user with id {} doesn't exist", trainingDocument.getUserId());
-        throw new EntityNotFoundException();
     }
 
-    public List<TrainingDocumentDto> getTrainingDocuments() {
-        List<TrainingDocumentEntity> trainingDocumentEntities = trainingDocumentRepository.findAll();
-        return documentConverter.convertTrainingDocumentEntitiesToTrainingDocumentDtos(trainingDocumentEntities);
+    public FileEntity updateFile(FileDto fileDto) {
+        //TODO treat the case when the file is null and therefore it should be removed
+        FileEntity fileEntity = fileConverter.convertFileDtoToFileEntity(fileDto);
+        return fileRepository.save(fileEntity);
     }
 
-    public EmployeeDocumentDto createEmployeeDocument(EmployeeDocumentDto employeeDocument) throws EntityNotFoundException {
+    public EmployeeDocumentDto createEmployeeDocument(SaveEmployeeDocumentDto employeeDocument) throws EntityNotFoundException {
         log.info("Creating employee document: {}", employeeDocument);
         Optional<UserEntity> user = userRepository.findById(employeeDocument.getUserId());
+        FileEntity file = this.saveFile(employeeDocument.getFile());
         if (user.isPresent()) {
-            EmployeeDocumentEntity employeeDocumentEntity = documentConverter.convertEmployeeDocumentDtoToEmployeeDocumentEntity(employeeDocument, user.get());
+            EmployeeDocumentEntity employeeDocumentEntity = documentConverter.convertSaveEmployeeDocumentDtoToEmployeeDocumentEntity(employeeDocument, user.get(), file);
             employeeDocumentEntity = employeeDocumentRepository.save(employeeDocumentEntity);
             return documentConverter.convertEmployeeDocumentEntityToEmployeeDocumentDto(employeeDocumentEntity);
         }
@@ -112,13 +117,14 @@ public class DocumentService {
         employeeDocumentRepository.deleteById(id);
     }
 
-    public EmployeeDocumentDto updateEmployeeDocument(EmployeeDocumentDto employeeDocument) throws EntityNotFoundException {
+    public EmployeeDocumentDto updateEmployeeDocument(SaveEmployeeDocumentDto employeeDocument) throws EntityNotFoundException {
         Optional<EmployeeDocumentEntity> employeeDocumentEntity = employeeDocumentRepository.findById(employeeDocument.getId());
+        FileEntity file = this.saveFile(employeeDocument.getFile());
         if(employeeDocumentEntity.isEmpty()){
             log.info("Could not find employee document with id {}", employeeDocument.getId());
             throw new EntityNotFoundException();
         }
-        EmployeeDocumentEntity updatedEmployeeDocumentEntity = documentConverter.convertEmployeeDocumentDtoToEmployeeDocumentEntity(employeeDocument, employeeDocumentEntity.get().getUser());
+        EmployeeDocumentEntity updatedEmployeeDocumentEntity = documentConverter.convertSaveEmployeeDocumentDtoToEmployeeDocumentEntity(employeeDocument, employeeDocumentEntity.get().getUser(), file);
         return documentConverter.convertEmployeeDocumentEntityToEmployeeDocumentDto(employeeDocumentRepository.save(updatedEmployeeDocumentEntity));
     }
 }
