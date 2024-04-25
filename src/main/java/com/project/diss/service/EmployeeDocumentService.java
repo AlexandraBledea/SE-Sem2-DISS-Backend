@@ -16,8 +16,10 @@ import com.project.diss.persistance.entity.FileEntity;
 import com.project.diss.persistance.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,9 +57,8 @@ public class EmployeeDocumentService {
         }
     }
 
-    public FileEntity updateFile(FileDto fileDto) {
-        //TODO treat the case when the file is null and therefore it should be removed
-        FileEntity fileEntity = fileConverter.convertFileDtoToFileEntity(fileDto);
+    public FileEntity updateFile(FileDto newFile, FileEntity oldFile) {
+        FileEntity fileEntity = fileConverter.convertFileDtoToFileEntity(newFile);
         return fileRepository.save(fileEntity);
     }
 
@@ -110,7 +111,7 @@ public class EmployeeDocumentService {
 
     public void deleteEmployeeDocument(Long id) throws EntityNotFoundException {
         Optional<EmployeeDocumentEntity> employeeDocumentEntity = employeeDocumentRepository.findById(id);
-        if(employeeDocumentEntity.isEmpty()){
+        if (employeeDocumentEntity.isEmpty()) {
             log.info("Could not find employee document with id {}", id);
             throw new EntityNotFoundException();
         }
@@ -119,11 +120,24 @@ public class EmployeeDocumentService {
 
     public EmployeeDocumentDto updateEmployeeDocument(SaveEmployeeDocumentDto employeeDocument) throws EntityNotFoundException {
         Optional<EmployeeDocumentEntity> employeeDocumentEntity = employeeDocumentRepository.findById(employeeDocument.getId());
-        FileEntity file = this.saveFile(employeeDocument.getFile());
-        if(employeeDocumentEntity.isEmpty()){
+        if (employeeDocumentEntity.isEmpty()) {
             log.info("Could not find employee document with id {}", employeeDocument.getId());
             throw new EntityNotFoundException();
         }
+
+        FileEntity oldFile = employeeDocumentEntity.get().getFile();
+        FileDto newFile = employeeDocument.getFile();
+
+        if(newFile == null) {
+            EmployeeDocumentEntity updatedEmployeeDocumentEntity = documentConverter.convertSaveEmployeeDocumentDtoToEmployeeDocumentEntity(employeeDocument, employeeDocumentEntity.get().getUser(), null);
+            updatedEmployeeDocumentEntity = employeeDocumentRepository.save(updatedEmployeeDocumentEntity);
+            if (oldFile != null) {
+                this.fileRepository.deleteById(oldFile.getId());
+            }
+            return documentConverter.convertEmployeeDocumentEntityToEmployeeDocumentDto(updatedEmployeeDocumentEntity);
+        }
+
+        FileEntity file = this.updateFile(employeeDocument.getFile(), employeeDocumentEntity.get().getFile());
         EmployeeDocumentEntity updatedEmployeeDocumentEntity = documentConverter.convertSaveEmployeeDocumentDtoToEmployeeDocumentEntity(employeeDocument, employeeDocumentEntity.get().getUser(), file);
         return documentConverter.convertEmployeeDocumentEntityToEmployeeDocumentDto(employeeDocumentRepository.save(updatedEmployeeDocumentEntity));
     }

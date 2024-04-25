@@ -30,6 +30,7 @@ public class EmployeeDocumentConverter {
 
         EmployeeDocumentEntity employeeDocument = new EmployeeDocumentEntity();
 
+        employeeDocument.setId(dto.getId());
         employeeDocument.setTitle(dto.getTitle());
         employeeDocument.setText(dto.getText());
         employeeDocument.setKeywords(dto.getKeywords());

@@ -69,7 +69,7 @@ public class EmployeeDocumentController {
 
     @DeleteMapping(value = EMPLOYEE_DOCUMENT_BASE_URL + "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> deleteEmployeeDocument(@PathVariable Long id) throws EntityNotFoundException {
-        log.info("Start: Delete employee document. Timestamp: {}", LocalDateTime.now());
+        log.info("Start: Delete employee document with id {}. Timestamp: {}", id, LocalDateTime.now());
         documentService.deleteEmployeeDocument(id);
         ResponseEntity<Object> response = ResponseEntity.ok().build();
         log.info("End: Delete employee document. Timestamp: {}", LocalDateTime.now());

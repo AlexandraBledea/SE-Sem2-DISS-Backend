@@ -30,6 +30,7 @@ public class TrainingDocumentConverter {
 
         TrainingDocumentEntity trainingDocument = new TrainingDocumentEntity();
 
+        trainingDocument.setId(dto.getId());
         trainingDocument.setTitle(dto.getTitle());
         trainingDocument.setText(dto.getText());
         trainingDocument.setKeywords(dto.getKeywords());
