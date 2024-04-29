@@ -15,7 +15,6 @@ import lombok.Setter;
         {
                 @Index(columnList = "progress_status")
         })
-
 public class BadgeEntity {
 
     @Id
@@ -36,4 +35,6 @@ public class BadgeEntity {
 
     @Column(name = "current_page")
     private Integer currentPage;
+
+    private String name;
 }

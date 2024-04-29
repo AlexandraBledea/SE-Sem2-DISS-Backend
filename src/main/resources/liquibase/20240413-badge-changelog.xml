@@ -58,4 +58,20 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20240429-badge-006" author="alebledea">
+        <addColumn tableName="badge">
+            <column name="name" type="varchar">
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20240429-badge-007" author="alebledea">
+        <dropColumn tableName="badge" columnName="fk_document_id"/>
+        <addColumn tableName="badge">
+            <column name="fk_document_id" type="bigint">
+                <constraints nullable="true" foreignKeyName="fk_document_id" references="document(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

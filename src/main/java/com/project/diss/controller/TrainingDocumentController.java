@@ -74,4 +74,22 @@ public class TrainingDocumentController {
         log.info("End: Start training document. Timestamp: {}", LocalDateTime.now());
         return response;
     }
+
+    @PutMapping(value = TRAINING_DOCUMENT_BASE_URL + UPDATE_USER_SUB_PATH, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> updateUser(@RequestBody UserProgressUpdateDto userDto) throws EntityNotFoundException {
+        log.info("Start: Update user. Timestamp: {}", LocalDateTime.now());
+        documentService.updateUserProgress(userDto);
+        ResponseEntity<Object> response = ResponseEntity.ok().build();
+        log.info("End: Update user. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
+
+    @DeleteMapping(value = TRAINING_DOCUMENT_BASE_URL + "/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> deleteTrainingDocument(@PathVariable Long id) throws EntityNotFoundException {
+        log.info("Start: Delete training document with id {}. Timestamp: {}", id, LocalDateTime.now());
+        documentService.deleteTrainingDocument(id);
+        ResponseEntity<Object> response = ResponseEntity.ok().build();
+        log.info("End: Delete training document. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
 }

@@ -120,4 +120,32 @@ public class TrainingDocumentService {
         badge.setCurrentPage(1);
         badgeRepository.save(badge);
     }
+
+    public void updateUserProgress(UserProgressUpdateDto dto) throws EntityNotFoundException {
+        Optional<UserEntity> user = userRepository.findById(dto.getId());
+        if (user.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        user.get().setPoints(dto.getPoints());
+        user.get().setLevel(dto.getLevel());
+        userRepository.save(user.get());
+    }
+
+    public void deleteTrainingDocument(Long id) throws EntityNotFoundException {
+        List<BadgeEntity> badgeEntitiesCompleted = badgeRepository.findByDocumentIdAndCompleted(id);
+        badgeEntitiesCompleted = badgeEntitiesCompleted.stream()
+                .peek(badge -> badge.setDocument(null))
+                .toList();
+        badgeRepository.saveAll(badgeEntitiesCompleted);
+
+        List<BadgeEntity> badgeEntitiesInProgress = badgeRepository.findByDocumentIdAndInProgress(id);
+        badgeRepository.deleteAll(badgeEntitiesInProgress);
+
+        Optional<TrainingDocumentEntity> trainingDocumentEntity = trainingDocumentRepository.findById(id);
+        if (trainingDocumentEntity.isEmpty()) {
+            log.info("Could not find training document with id {}", id);
+            throw new EntityNotFoundException();
+        }
+        trainingDocumentRepository.deleteById(id);
+    }
 }

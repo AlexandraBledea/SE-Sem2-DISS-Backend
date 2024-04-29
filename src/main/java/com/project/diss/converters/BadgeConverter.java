@@ -20,6 +20,7 @@ public class BadgeConverter {
         badge.setUserId(entity.getUser().getId());
         badge.setProgressStatus(entity.getProgressStatus());
         badge.setCurrentPage(entity.getCurrentPage());
+        badge.setName(entity.getName());
         return badge;
     }
 
@@ -34,6 +35,7 @@ public class BadgeConverter {
         badge.setUser(userEntity);
         badge.setProgressStatus(dto.getProgressStatus());
         badge.setCurrentPage(dto.getCurrentPage());
+        badge.setName(trainingDocumentEntity.getTitle());
         return badge;
     }
 }

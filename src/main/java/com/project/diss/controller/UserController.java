@@ -1,7 +1,7 @@
 package com.project.diss.controller;
 
-import com.project.diss.dto.UserSaveDto;
 import com.project.diss.dto.UserDto;
+import com.project.diss.dto.UserSaveDto;
 import com.project.diss.exception.ConflictException;
 import com.project.diss.exception.RequestNotValidException;
 import com.project.diss.service.UserService;
@@ -9,29 +9,31 @@ import com.project.diss.util.annotations.AllowAdmin;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 
 import static com.project.diss.util.AppValidator.validateUserCreation;
+import static com.project.diss.util.Constants.CREATE_USER_SUB_PATH;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Slf4j
-public class AdminController {
+public class UserController {
 
-    public static final String ADMIN_BASE_URL = "/admin";
+    public static final String ADMIN_BASE_URL = "/user";
 
-    public static final String CREATE_ACCOUNT_SUB_PATH = "/create-account";
     private final UserService userService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @AllowAdmin
-    @PostMapping(value = ADMIN_BASE_URL + CREATE_ACCOUNT_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = ADMIN_BASE_URL + CREATE_USER_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> createAccount(@RequestBody UserSaveDto user) throws ConflictException, RequestNotValidException {
         log.info("Start: Create account. Timestamp: {}", LocalDateTime.now());
         ResponseEntity<UserDto> response;
@@ -44,4 +46,5 @@ public class AdminController {
         log.info("End: Create account. Timestamp: {}", LocalDateTime.now());
         return response;
     }
+
 }

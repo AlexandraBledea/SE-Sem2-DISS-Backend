@@ -8,4 +8,5 @@ public class BadgeDto {
     Long userId;
     String progressStatus;
     Integer currentPage;
+    String name;
 }
