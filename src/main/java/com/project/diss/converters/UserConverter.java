@@ -1,6 +1,7 @@
 package com.project.diss.converters;
 
-import com.project.diss.dto.SaveUserDto;
+import com.project.diss.dto.UserSaveDto;
+import com.project.diss.dto.UserDocumentDto;
 import com.project.diss.dto.UserDto;
 import com.project.diss.persistance.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +20,34 @@ public class UserConverter {
     public UserConverter(BCryptPasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
-    public UserEntity convertSaveUserDtoToUserEntity(SaveUserDto saveUserDto) {
+
+    public UserDocumentDto convertUserEntityToUserDocumentDto(UserEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        UserDocumentDto user = new UserDocumentDto();
+
+        user.setId(entity.getId());
+        user.setFirstname(entity.getFirstname());
+        user.setLastname(entity.getLastname());
+        user.setEmail(entity.getEmail());
+        return user;
+    }
+
+    public UserEntity convertSaveUserDtoToUserEntity(UserSaveDto userSaveDto) {
         UserEntity user = new UserEntity();
-        user.setEmail(saveUserDto.getEmail());
-        user.setPassword(passwordEncoder.encode(saveUserDto.getPassword()));
-        user.setFirstname(saveUserDto.getFirstname());
-        user.setLastname(saveUserDto.getLastname());
-        user.setPhoneNumber(saveUserDto.getPhoneNumber());
-        user.setRole(saveUserDto.getRole());
-        user.setDepartment(saveUserDto.getDepartment());
-        user.setLocation(saveUserDto.getLocation());
-        user.setLevel(saveUserDto.getLevel());
-        user.setPoints(saveUserDto.getPoints());
-        user.setType(saveUserDto.getType());
+        user.setEmail(userSaveDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userSaveDto.getPassword()));
+        user.setFirstname(userSaveDto.getFirstname());
+        user.setLastname(userSaveDto.getLastname());
+        user.setPhoneNumber(userSaveDto.getPhoneNumber());
+        user.setRole(userSaveDto.getRole());
+        user.setDepartment(userSaveDto.getDepartment());
+        user.setLocation(userSaveDto.getLocation());
+        user.setLevel(userSaveDto.getLevel());
+        user.setPoints(userSaveDto.getPoints());
+        user.setType(userSaveDto.getType());
         return user;
     }
 

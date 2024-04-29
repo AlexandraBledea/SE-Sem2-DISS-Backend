@@ -1,6 +1,6 @@
 package com.project.diss.controller;
 
-import com.project.diss.dto.LoginUserDto;
+import com.project.diss.dto.UserLoginDto;
 import com.project.diss.dto.Token;
 import com.project.diss.exception.AuthenticationException;
 import com.project.diss.exception.RequestNotValidException;
@@ -30,7 +30,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = AUTH_BASE_URL + LOGIN_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Token> authentication(@RequestBody LoginUserDto loginUser) throws AuthenticationException, RequestNotValidException {
+    public ResponseEntity<Token> authentication(@RequestBody UserLoginDto loginUser) throws AuthenticationException, RequestNotValidException {
 
         ResponseEntity<Token> response;
         log.info("Start: User login. Timestamp: {}", LocalDateTime.now());

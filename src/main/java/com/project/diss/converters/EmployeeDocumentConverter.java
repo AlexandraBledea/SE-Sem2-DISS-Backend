@@ -1,7 +1,8 @@
 package com.project.diss.converters;
 
 import com.project.diss.dto.EmployeeDocumentDto;
-import com.project.diss.dto.SaveEmployeeDocumentDto;
+import com.project.diss.dto.EmployeeDocumentGetDto;
+import com.project.diss.dto.EmployeeDocumentSaveDto;
 import com.project.diss.persistance.entity.EmployeeDocumentEntity;
 import com.project.diss.persistance.entity.FileEntity;
 import com.project.diss.persistance.entity.UserEntity;
@@ -23,7 +24,7 @@ public class EmployeeDocumentConverter {
         this.fileConverter = fileConverter;
     }
 
-    public EmployeeDocumentEntity convertSaveEmployeeDocumentDtoToEmployeeDocumentEntity(SaveEmployeeDocumentDto dto, UserEntity user, FileEntity file) {
+    public EmployeeDocumentEntity convertSaveEmployeeDocumentDtoToEmployeeDocumentEntity(EmployeeDocumentSaveDto dto, UserEntity user, FileEntity file) {
         if (dto == null) {
             return null;
         }
@@ -53,39 +54,37 @@ public class EmployeeDocumentConverter {
         employeeDocument.setKeywords(entity.getKeywords());
         employeeDocument.setLastModified(entity.getLastModified());
         employeeDocument.setVisibility(entity.getVisibility());
-        employeeDocument.setUser(this.userConverter.convertUserEntityToUserDto(entity.getUser()));
+        employeeDocument.setUser(this.userConverter.convertUserEntityToUserDocumentDto(entity.getUser()));
         employeeDocument.setFile(this.fileConverter.convertFileEntityToFileDto(entity.getFile()));
         return employeeDocument;
     }
 
-    public EmployeeDocumentEntity convertEmployeeDocumentDtoToEmployeeDocumentEntity(EmployeeDocumentDto dto) {
-        if (dto == null) {
+    public EmployeeDocumentGetDto convertEmployeeDocumentEntityToGetEmployeeDocumentDto(EmployeeDocumentEntity entity) {
+        if (entity == null) {
             return null;
         }
 
-        EmployeeDocumentEntity employeeDocument = new EmployeeDocumentEntity();
+        EmployeeDocumentGetDto getEmployeeDocument = new EmployeeDocumentGetDto();
 
-        employeeDocument.setId(dto.getId());
-        employeeDocument.setTitle(dto.getTitle());
-        employeeDocument.setText(dto.getText());
-        employeeDocument.setKeywords(dto.getKeywords());
-        employeeDocument.setLastModified(dto.getLastModified());
-        employeeDocument.setVisibility(dto.isVisibility());
-        employeeDocument.setUser(this.userConverter.convertUserDtoToUserEntity(dto.getUser()));
-        employeeDocument.setFile(this.fileConverter.convertFileDtoToFileEntity(dto.getFile()));
-        return employeeDocument;
+        getEmployeeDocument.setId(entity.getId());
+        getEmployeeDocument.setTitle(entity.getTitle());
+        getEmployeeDocument.setLastModified(entity.getLastModified());
+        getEmployeeDocument.setUser(this.userConverter.convertUserEntityToUserDocumentDto(entity.getUser()));
+        return getEmployeeDocument;
     }
 
-    public List<EmployeeDocumentDto> convertEmployeeDocumentEntitiesToEmployeeDocumentDtos(List<EmployeeDocumentEntity> entities) {
+    public List<EmployeeDocumentGetDto> convertEmployeeDocumentEntitiesToGetEmployeeDocumentDtos(List<EmployeeDocumentEntity> entities) {
         if (entities == null) {
             return null;
         }
 
-        List<EmployeeDocumentDto> list = new ArrayList<>(entities.size());
+        List<EmployeeDocumentGetDto> list = new ArrayList<>(entities.size());
         for (EmployeeDocumentEntity employeeDocument : entities) {
-            list.add(convertEmployeeDocumentEntityToEmployeeDocumentDto(employeeDocument));
+            list.add(convertEmployeeDocumentEntityToGetEmployeeDocumentDto(employeeDocument));
         }
 
         return list;
     }
+
+
 }

@@ -4,7 +4,7 @@ import com.project.diss.persistance.entity.enums.UserType;
 import lombok.Data;
 
 @Data
-public class SaveUserDto {
+public class UserSaveDto {
     private String email;
     private String password;
     private String firstname;

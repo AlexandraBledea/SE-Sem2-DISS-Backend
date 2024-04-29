@@ -17,7 +17,10 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "document")
+@Table(name = "document", indexes =
+        {
+                @Index(columnList = "fk_user_id"),
+        })
 @Inheritance(strategy = InheritanceType.JOINED)
 public class DocumentEntity {
 
@@ -43,7 +46,7 @@ public class DocumentEntity {
     @Column(name = "last_modified")
     private LocalDateTime lastModified;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_user_id")
     private UserEntity user;
 

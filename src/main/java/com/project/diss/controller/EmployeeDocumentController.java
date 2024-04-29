@@ -1,7 +1,8 @@
 package com.project.diss.controller;
 
 import com.project.diss.dto.EmployeeDocumentDto;
-import com.project.diss.dto.SaveEmployeeDocumentDto;
+import com.project.diss.dto.EmployeeDocumentGetDto;
+import com.project.diss.dto.EmployeeDocumentSaveDto;
 import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.exception.RequestNotValidException;
 import com.project.diss.service.EmployeeDocumentService;
@@ -30,7 +31,7 @@ public class EmployeeDocumentController {
     }
 
     @PostMapping(value =  EMPLOYEE_DOCUMENT_BASE_URL + CREATE_DOCUMENT_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmployeeDocumentDto> createEmployeeDocument(@RequestBody SaveEmployeeDocumentDto employeeDocument) throws RequestNotValidException, EntityNotFoundException {
+    public ResponseEntity<EmployeeDocumentDto> createEmployeeDocument(@RequestBody EmployeeDocumentSaveDto employeeDocument) throws RequestNotValidException, EntityNotFoundException {
         log.info("Start: Create employee document. Timestamp: {}", LocalDateTime.now());
         ResponseEntity<EmployeeDocumentDto> response;
         if (!validateEmployeeDocumentCreation(employeeDocument)) {
@@ -43,18 +44,20 @@ public class EmployeeDocumentController {
         return response;
     }
 
+    //TODO - FIXED
     @GetMapping(value = EMPLOYEE_DOCUMENT_BASE_URL + GET_OWN_DOCUMENTS_SUB_PATH + "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<EmployeeDocumentDto>> getEmployeeOwnDocuments(@PathVariable Long id) throws EntityNotFoundException {
+    public ResponseEntity<List<EmployeeDocumentGetDto>> getEmployeeOwnDocuments(@PathVariable Long id) {
         log.info("Start: Get employee own documents. Timestamp: {}", LocalDateTime.now());
-        ResponseEntity<List<EmployeeDocumentDto>> response = ResponseEntity.ok(documentService.getEmployeeOwnDocuments(id));
+        ResponseEntity<List<EmployeeDocumentGetDto>> response = ResponseEntity.ok(documentService.getEmployeeOwnDocuments(id));
         log.info("End: Get employee own documents. Timestamp: {}", LocalDateTime.now());
         return response;
     }
 
+    //TODO - FIXED
     @GetMapping(value = EMPLOYEE_DOCUMENT_BASE_URL + GET_DOCUMENTS_SUB_PATH + "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<EmployeeDocumentDto>> getEmployeeDocuments(@PathVariable Long id) throws EntityNotFoundException {
+    public ResponseEntity<List<EmployeeDocumentGetDto>> getEmployeeDocuments(@PathVariable Long id) throws EntityNotFoundException {
         log.info("Start: Get employee documents. Timestamp: {}", LocalDateTime.now());
-        ResponseEntity<List<EmployeeDocumentDto>> response = ResponseEntity.ok(documentService.getEmployeeDocuments(id));
+        ResponseEntity<List<EmployeeDocumentGetDto>> response = ResponseEntity.ok(documentService.getEmployeeDocuments(id));
         log.info("End: Get employee documents. Timestamp: {}", LocalDateTime.now());
         return response;
     }
@@ -77,7 +80,7 @@ public class EmployeeDocumentController {
     }
 
     @PutMapping(value = EMPLOYEE_DOCUMENT_BASE_URL + UPDATE_DOCUMENT_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmployeeDocumentDto> updateEmployeeDocument(@RequestBody SaveEmployeeDocumentDto employeeDocument) throws EntityNotFoundException {
+    public ResponseEntity<EmployeeDocumentDto> updateEmployeeDocument(@RequestBody EmployeeDocumentSaveDto employeeDocument) throws EntityNotFoundException {
         log.info("Start: Update employee document. Timestamp: {}", LocalDateTime.now());
         ResponseEntity<EmployeeDocumentDto> response = ResponseEntity.ok(documentService.updateEmployeeDocument(employeeDocument));
         log.info("End: Update employee document. Timestamp: {}", LocalDateTime.now());

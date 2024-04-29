@@ -11,6 +11,7 @@ public class EmployeeDocumentDto {
     private String keywords;
     private LocalDateTime lastModified;
     private boolean visibility;
-    private UserDto user; //TODO - create another DTO for user only with necessary fields and use it here
+    private UserDocumentDto user;
     private FileDto file;
 }
+

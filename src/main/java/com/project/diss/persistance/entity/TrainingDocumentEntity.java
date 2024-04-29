@@ -11,16 +11,17 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="training_document")
+@Table(name="training_document", indexes = {
+        @Index(columnList = "required_level"),
+        @Index(columnList = "reward")
+})
 @PrimaryKeyJoinColumn(name="id")
 public class TrainingDocumentEntity extends DocumentEntity{
 
-    @Column(name="required_points")
-    private Integer pointsRequired;
+    @Column(name="required_level")
+    private Integer requiredLevel;
 
     @Column
     private Integer reward;
 
-    @Column(name="total_pages")
-    private Integer totalPages;
 }

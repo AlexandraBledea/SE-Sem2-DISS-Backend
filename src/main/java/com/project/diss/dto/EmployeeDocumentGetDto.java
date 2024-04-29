@@ -5,14 +5,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class TrainingDocumentDto {
+//Used when we display the documents in a list
+public class EmployeeDocumentGetDto {
     private Long id;
     private String title;
-    private String text;
-    private String keywords;
     private LocalDateTime lastModified;
-    private Integer requiredLevel;
-    private Integer reward;
     private UserDocumentDto user;
-    private FileDto file;
 }

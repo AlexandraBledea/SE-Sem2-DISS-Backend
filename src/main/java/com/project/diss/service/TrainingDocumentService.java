@@ -1,24 +1,17 @@
 package com.project.diss.service;
 
+import com.project.diss.converters.BadgeConverter;
 import com.project.diss.converters.FileConverter;
-import com.project.diss.dto.FileDto;
-import com.project.diss.dto.SaveTrainingDocumentDto;
-import com.project.diss.dto.TrainingDocumentDto;
+import com.project.diss.dto.*;
 import com.project.diss.converters.TrainingDocumentConverter;
 import com.project.diss.exception.EntityNotFoundException;
-import com.project.diss.persistance.DocumentRepository;
-import com.project.diss.persistance.FileRepository;
-import com.project.diss.persistance.TrainingDocumentRepository;
-import com.project.diss.persistance.UserRepository;
-import com.project.diss.persistance.entity.FileEntity;
-import com.project.diss.persistance.entity.TrainingDocumentEntity;
-import com.project.diss.persistance.entity.UserEntity;
+import com.project.diss.persistance.*;
+import com.project.diss.persistance.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -27,19 +20,25 @@ public class TrainingDocumentService {
     UserRepository userRepository;
     DocumentRepository documentRepository;
     FileRepository fileRepository;
-
     TrainingDocumentRepository trainingDocumentRepository;
-
+    BadgeRepository badgeRepository;
     TrainingDocumentConverter documentConverter;
-
     FileConverter fileConverter;
+    BadgeConverter badgeConverter;
 
     @Autowired
-    public TrainingDocumentService(UserRepository userRepository, DocumentRepository documentRepository, TrainingDocumentRepository trainingDocumentRepository, TrainingDocumentConverter documentConverter) {
+    public TrainingDocumentService(UserRepository userRepository, DocumentRepository documentRepository,
+                                   TrainingDocumentRepository trainingDocumentRepository, FileConverter fileConverter,
+                                   TrainingDocumentConverter documentConverter, FileRepository fileRepository,
+                                   BadgeConverter badgeConverter, BadgeRepository badgeRepository) {
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.documentConverter = documentConverter;
         this.trainingDocumentRepository = trainingDocumentRepository;
+        this.fileConverter = fileConverter;
+        this.fileRepository = fileRepository;
+        this.badgeConverter = badgeConverter;
+        this.badgeRepository = badgeRepository;
     }
 
     public FileEntity createFile(FileDto fileDto) {
@@ -52,7 +51,7 @@ public class TrainingDocumentService {
         }
     }
 
-    public TrainingDocumentDto createTrainingDocument(SaveTrainingDocumentDto trainingDocument) throws EntityNotFoundException {
+    public TrainingDocumentDto createTrainingDocument(TrainingDocumentSaveDto trainingDocument) throws EntityNotFoundException {
         log.info("Creating training document: {}", trainingDocument);
         Optional<UserEntity> user = userRepository.findById(trainingDocument.getUserId());
         FileEntity file = createFile(trainingDocument.getFile());
@@ -65,9 +64,60 @@ public class TrainingDocumentService {
         throw new EntityNotFoundException();
     }
 
-    public List<TrainingDocumentDto> getTrainingDocuments() {
-        List<TrainingDocumentEntity> trainingDocumentEntities = trainingDocumentRepository.findAll();
-        return documentConverter.convertTrainingDocumentEntitiesToTrainingDocumentDtos(trainingDocumentEntities);
+
+    public List<TrainingDocumentGetDto> getCompletedTrainingDocuments(Long id) {
+        List<TrainingDocumentEntity> trainingDocumentEntities = trainingDocumentRepository.findCompletedTrainingDocumentsForUser(id);
+        if (trainingDocumentEntities.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return documentConverter.convertTrainingDocumentEntitiesToTrainingDocumentGetDtos(trainingDocumentEntities);
     }
 
+    public List<TrainingDocumentGetDto> getTodoTrainingDocuments(Long id) {
+        List<TrainingDocumentEntity> todoTrainingDocuments = trainingDocumentRepository.findTodoTrainingDocumentsForUser(id);
+        if (todoTrainingDocuments.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return documentConverter.convertTrainingDocumentEntitiesToTrainingDocumentGetDtos(todoTrainingDocuments);
+    }
+
+    public TrainingDocumentViewDto getTrainingDocument(TrainingDocumentStartDto dto) throws EntityNotFoundException {
+        Optional<TrainingDocumentEntity> trainingDocument = trainingDocumentRepository.findById(dto.getTrainingId());
+        if (trainingDocument.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        Optional<BadgeEntity> badgeEntity = badgeRepository.findByUserIdAndDocumentId(dto.getUserId(), dto.getTrainingId());
+        if (badgeEntity.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        return documentConverter.convertTrainingDocumentEntityToTrainingDocumentViewDto(trainingDocument.get(), badgeEntity.get());
+    }
+
+    public void updateBadgeTraining(BadgeDto badgeDto) throws EntityNotFoundException {
+        Optional<BadgeEntity> badgeEntity = badgeRepository.findByUserIdAndDocumentId(badgeDto.getUserId(), badgeDto.getTrainingId());
+        if (badgeEntity.isEmpty()) {
+           createBadgeTraining(badgeDto);
+        } else {
+            if(badgeDto.getProgressStatus() != null && badgeDto.getCurrentPage() != null) {
+                badgeEntity.get().setProgressStatus(badgeDto.getProgressStatus());
+                badgeEntity.get().setCurrentPage(badgeDto.getCurrentPage());
+                badgeRepository.save(badgeEntity.get());
+            }
+        }
+    }
+
+    public void createBadgeTraining(BadgeDto badgeDto) throws EntityNotFoundException {
+        Optional<TrainingDocumentEntity> trainingDocument = trainingDocumentRepository.findById(badgeDto.getTrainingId());
+        if (trainingDocument.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        Optional<UserEntity> user = userRepository.findById(badgeDto.getUserId());
+        if (user.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+        BadgeEntity badge = this.badgeConverter.convertBadgeDtoToBadgeEntity(badgeDto, user.get(), trainingDocument.get());
+        badge.setProgressStatus("In progress");
+        badge.setCurrentPage(1);
+        badgeRepository.save(badge);
+    }
 }

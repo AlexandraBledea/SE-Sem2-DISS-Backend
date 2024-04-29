@@ -53,4 +53,22 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20240428-training-document-007" author="alebledea">
+        <dropColumn tableName="training_document" columnName="required_points"/>
+        <addColumn tableName="training_document">
+            <column name="level_required" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20240428-training-document-008" author="alebledea">
+        <dropColumn tableName="training_document" columnName="total_pages"/>
+    </changeSet>
+
+    <changeSet id="20240428-training-document-009" author="alebledea">
+        <dropColumn tableName="training_document" columnName="level_required"/>
+        <addColumn tableName="training_document">
+            <column name="required_level" type="int"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

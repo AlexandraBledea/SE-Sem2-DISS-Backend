@@ -4,22 +4,21 @@ import com.project.diss.converters.FileConverter;
 import com.project.diss.dto.EmployeeDocumentDto;
 import com.project.diss.converters.EmployeeDocumentConverter;
 import com.project.diss.dto.FileDto;
-import com.project.diss.dto.SaveEmployeeDocumentDto;
+import com.project.diss.dto.EmployeeDocumentGetDto;
+import com.project.diss.dto.EmployeeDocumentSaveDto;
 import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.persistance.DocumentRepository;
 import com.project.diss.persistance.EmployeeDocumentRepository;
 import com.project.diss.persistance.FileRepository;
 import com.project.diss.persistance.UserRepository;
-import com.project.diss.persistance.entity.DocumentEntity;
 import com.project.diss.persistance.entity.EmployeeDocumentEntity;
 import com.project.diss.persistance.entity.FileEntity;
 import com.project.diss.persistance.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,12 +56,12 @@ public class EmployeeDocumentService {
         }
     }
 
-    public FileEntity updateFile(FileDto newFile, FileEntity oldFile) {
+    public FileEntity updateFile(FileDto newFile) {
         FileEntity fileEntity = fileConverter.convertFileDtoToFileEntity(newFile);
         return fileRepository.save(fileEntity);
     }
 
-    public EmployeeDocumentDto createEmployeeDocument(SaveEmployeeDocumentDto employeeDocument) throws EntityNotFoundException {
+    public EmployeeDocumentDto createEmployeeDocument(EmployeeDocumentSaveDto employeeDocument) throws EntityNotFoundException {
         log.info("Creating employee document: {}", employeeDocument);
         Optional<UserEntity> user = userRepository.findById(employeeDocument.getUserId());
         FileEntity file = this.saveFile(employeeDocument.getFile());
@@ -75,29 +74,20 @@ public class EmployeeDocumentService {
         throw new EntityNotFoundException();
     }
 
-    public List<EmployeeDocumentDto> getEmployeeOwnDocuments(Long id) throws EntityNotFoundException {
-        Optional<UserEntity> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            List<DocumentEntity> documents = user.get().getDocuments();
-            List<EmployeeDocumentEntity> employeeDocumentEntities = documents.stream().filter(document -> document instanceof EmployeeDocumentEntity).map(document -> (EmployeeDocumentEntity) document).toList();
-            return documentConverter.convertEmployeeDocumentEntitiesToEmployeeDocumentDtos(employeeDocumentEntities);
+    public List<EmployeeDocumentGetDto> getEmployeeDocuments(Long id) throws EntityNotFoundException {
+        List<EmployeeDocumentEntity> documents = employeeDocumentRepository.findAllRelevantDocumentsSorted(id);
+        if(documents.isEmpty()) {
+            throw new EntityNotFoundException();
         }
-        log.error("Could not retrieve employee documents for user with id {}", id);
-        throw new EntityNotFoundException();
+        return documentConverter.convertEmployeeDocumentEntitiesToGetEmployeeDocumentDtos(documents);
     }
 
-    public List<EmployeeDocumentDto> getEmployeeDocuments(Long id) throws EntityNotFoundException {
-        List<DocumentEntity> documents = documentRepository.findAll();
-        List<EmployeeDocumentDto> employeeDocumentEntities = documentConverter
-                .convertEmployeeDocumentEntitiesToEmployeeDocumentDtos(documents.stream()
-                        .filter(document -> document instanceof EmployeeDocumentEntity &&
-                                ((EmployeeDocumentEntity) document).getVisibility() &&
-                                !document.getUser().getId().equals(id))
-                        .map(document -> (EmployeeDocumentEntity) document).toList());
-        List<EmployeeDocumentDto> employeeOwnDocumentEntities = getEmployeeOwnDocuments(id);
-        employeeDocumentEntities.addAll(employeeOwnDocumentEntities);
-        employeeDocumentEntities.sort((o1, o2) -> o2.getLastModified().compareTo(o1.getLastModified()));
-        return employeeDocumentEntities;
+    public List<EmployeeDocumentGetDto> getEmployeeOwnDocuments(Long id) {
+        List<EmployeeDocumentEntity> documents = employeeDocumentRepository.findDocumentsOwnedBy(id);
+        if(documents.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return documentConverter.convertEmployeeDocumentEntitiesToGetEmployeeDocumentDtos(documents);
     }
 
     public EmployeeDocumentDto getEmployeeDocument(Long id) throws EntityNotFoundException {
@@ -118,7 +108,7 @@ public class EmployeeDocumentService {
         employeeDocumentRepository.deleteById(id);
     }
 
-    public EmployeeDocumentDto updateEmployeeDocument(SaveEmployeeDocumentDto employeeDocument) throws EntityNotFoundException {
+    public EmployeeDocumentDto updateEmployeeDocument(EmployeeDocumentSaveDto employeeDocument) throws EntityNotFoundException {
         Optional<EmployeeDocumentEntity> employeeDocumentEntity = employeeDocumentRepository.findById(employeeDocument.getId());
         if (employeeDocumentEntity.isEmpty()) {
             log.info("Could not find employee document with id {}", employeeDocument.getId());
@@ -137,7 +127,7 @@ public class EmployeeDocumentService {
             return documentConverter.convertEmployeeDocumentEntityToEmployeeDocumentDto(updatedEmployeeDocumentEntity);
         }
 
-        FileEntity file = this.updateFile(employeeDocument.getFile(), employeeDocumentEntity.get().getFile());
+        FileEntity file = this.updateFile(employeeDocument.getFile());
         EmployeeDocumentEntity updatedEmployeeDocumentEntity = documentConverter.convertSaveEmployeeDocumentDtoToEmployeeDocumentEntity(employeeDocument, employeeDocumentEntity.get().getUser(), file);
         return documentConverter.convertEmployeeDocumentEntityToEmployeeDocumentDto(employeeDocumentRepository.save(updatedEmployeeDocumentEntity));
     }

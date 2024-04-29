@@ -11,7 +11,11 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="badge")
+@Table(name = "badge", indexes =
+        {
+                @Index(columnList = "progress_status")
+        })
+
 public class BadgeEntity {
 
     @Id
@@ -20,16 +24,16 @@ public class BadgeEntity {
     private Long id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name="fk_document_id")
+    @JoinColumn(name = "fk_document_id")
     private DocumentEntity document;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name="fk_user_id")
+    @JoinColumn(name = "fk_user_id")
     private UserEntity user;
 
-    @Column(name="progress_status")
+    @Column(name = "progress_status")
     private String progressStatus;
 
-    @Column(name="current_page")
+    @Column(name = "current_page")
     private Integer currentPage;
 }

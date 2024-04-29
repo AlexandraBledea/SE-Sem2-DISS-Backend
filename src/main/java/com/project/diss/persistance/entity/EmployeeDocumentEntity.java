@@ -11,7 +11,9 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="employee_document")
+@Table(name="employee_document", indexes = {
+        @Index(columnList = "visibility")
+})
 @PrimaryKeyJoinColumn(name="id")
 public class EmployeeDocumentEntity extends DocumentEntity {
 

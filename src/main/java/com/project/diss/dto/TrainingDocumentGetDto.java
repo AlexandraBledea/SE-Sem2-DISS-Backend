@@ -2,17 +2,12 @@ package com.project.diss.dto;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
-public class TrainingDocumentDto {
+public class TrainingDocumentGetDto {
     private Long id;
     private String title;
-    private String text;
-    private String keywords;
-    private LocalDateTime lastModified;
     private Integer requiredLevel;
     private Integer reward;
+    private String text;
     private UserDocumentDto user;
-    private FileDto file;
 }

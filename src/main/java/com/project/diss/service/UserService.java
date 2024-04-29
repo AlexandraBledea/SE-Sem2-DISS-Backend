@@ -1,7 +1,7 @@
 package com.project.diss.service;
 
 import com.project.diss.configuration.JwtTokenService;
-import com.project.diss.dto.SaveUserDto;
+import com.project.diss.dto.UserSaveDto;
 import com.project.diss.dto.Token;
 import com.project.diss.dto.UserDto;
 import com.project.diss.converters.UserConverter;
@@ -51,7 +51,7 @@ public class UserService {
         }
 
         Token token = new Token();
-        token.setToken(jwtTokenService.createJwtToken(user.getEmail(), user.getType(), user.getId(), createUserInitials(user)));
+        token.setToken(jwtTokenService.createJwtToken(user.getEmail(), user.getType(), user.getId(), createUserInitials(user), user.getLevel(), user.getPoints()));
         log.info("JWT token generated successfully for user '{}'.", email);
         return token;
     }
@@ -61,7 +61,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public UserDto createUser(SaveUserDto dto) throws ConflictException {
+    public UserDto createUser(UserSaveDto dto) throws ConflictException {
         UserEntity user = userConverter.convertSaveUserDtoToUserEntity(dto);
         if(getUserInformation(user.getEmail()) != null) {
             log.error("Could not save database entry because user with email '{}' already exists.", user.getEmail());
