@@ -29,9 +29,6 @@ public class JwtTokenService {
     private static final String CLAIM_USER = "email";
     private static final String CLAIM_ID = "id";
     private static final String CLAIM_TYPE = "type";
-    private static final String CLAIM_USER_INITIALS = "initials";
-    private static final String CLAIM_USER_LEVEL = "level";
-    private static final String CLAIM_USER_POINTS = "points";
 
 
     @Value("${application.secret}")
@@ -52,30 +49,6 @@ public class JwtTokenService {
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
                     .parseClaimsJws(token);
-
-            //Checks if there are the initials present
-            String userInitials = Optional.ofNullable(claims.getBody().get(CLAIM_USER_INITIALS))
-                    .map(Object::toString)
-                    .orElseThrow(() -> {
-                        log.error("JWT token does not contain user initials");
-                        return new AuthenticationCredentialsNotFoundException("No user initials given in jwt");
-                    });
-
-            //Checks if there are the initials present
-            String userPoints = Optional.ofNullable(claims.getBody().get(CLAIM_USER_POINTS))
-                    .map(Object::toString)
-                    .orElseThrow(() -> {
-                        log.error("JWT token does not contain user points");
-                        return new AuthenticationCredentialsNotFoundException("No user points given in jwt");
-                    });
-
-            //Checks if there are the initials present
-            String userLevel = Optional.ofNullable(claims.getBody().get(CLAIM_USER_LEVEL))
-                    .map(Object::toString)
-                    .orElseThrow(() -> {
-                        log.error("JWT token does not contain user level");
-                        return new AuthenticationCredentialsNotFoundException("No user level given in jwt");
-                    });
 
             //Checks if there is an email present
             String email = Optional.ofNullable(claims.getBody().get(CLAIM_USER))
@@ -125,7 +98,7 @@ public class JwtTokenService {
         return auth;
     }
 
-    public String createJwtToken(final String email, final UserType type, final Long id, final String initials, Integer level, Integer points) {
+    public String createJwtToken(final String email, final UserType type, final Long id) {
         // Create the jwt token
         String jwtToken;
 
@@ -133,9 +106,6 @@ public class JwtTokenService {
                 .claim(CLAIM_USER, email)//
                 .claim(CLAIM_TYPE, type)//
                 .claim(CLAIM_ID, id)
-                .claim(CLAIM_USER_INITIALS, initials)
-                .claim(CLAIM_USER_LEVEL, level)
-                .claim(CLAIM_USER_POINTS, points)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))//
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes(StandardCharsets.UTF_8))//
                 .compact();//

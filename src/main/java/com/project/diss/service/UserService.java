@@ -7,12 +7,16 @@ import com.project.diss.dto.UserDto;
 import com.project.diss.converters.UserConverter;
 import com.project.diss.exception.AuthenticationException;
 import com.project.diss.exception.ConflictException;
+import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.persistance.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.project.diss.persistance.UserRepository;
+
+import java.util.Optional;
 
 
 @Slf4j
@@ -51,7 +55,7 @@ public class UserService {
         }
 
         Token token = new Token();
-        token.setToken(jwtTokenService.createJwtToken(user.getEmail(), user.getType(), user.getId(), createUserInitials(user), user.getLevel(), user.getPoints()));
+        token.setToken(jwtTokenService.createJwtToken(user.getEmail(), user.getType(), user.getId()));
         log.info("JWT token generated successfully for user '{}'.", email);
         return token;
     }
@@ -68,6 +72,15 @@ public class UserService {
             throw new ConflictException();
         }
         return userConverter.convertUserEntityToUserDto(userRepository.save(user));
+    }
+
+    public UserDto getUserInfo(Long id) throws EntityNotFoundException {
+        Optional<UserEntity> user = userRepository.findById(id);
+        if(user.isEmpty()) {
+            log.error("Could not find user with id '{}'.", id);
+            throw new EntityNotFoundException();
+        }
+        return userConverter.convertUserEntityToUserDto(user.get());
     }
 
 }
