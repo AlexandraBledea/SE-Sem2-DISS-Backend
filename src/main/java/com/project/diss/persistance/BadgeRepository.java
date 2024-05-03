@@ -19,4 +19,7 @@ public interface BadgeRepository extends JpaRepository<BadgeEntity, Long> {
 
     @Query("SELECT b FROM BadgeEntity b WHERE b.document.id = :documentId AND b.progressStatus = 'Completed'")
     List<BadgeEntity> findByDocumentIdAndCompleted(Long documentId);
+
+    @Query("SELECT b FROM BadgeEntity b WHERE b.user.id = :userId AND b.progressStatus = 'Completed'")
+    List<BadgeEntity> findByUserIdAndCompleted(Long userId);
 }

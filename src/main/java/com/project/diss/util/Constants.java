@@ -13,4 +13,5 @@ public class Constants {
     public static final String UPDATE_BADGE_SUB_PATH = "/update-progress";
     public static final String CREATE_USER_SUB_PATH = "/create-user";
     public static final String UPDATE_USER_SUB_PATH = "/update-user";
+    public static final String GET_BADGES_SUB_PATH = "/get-badges";
 }

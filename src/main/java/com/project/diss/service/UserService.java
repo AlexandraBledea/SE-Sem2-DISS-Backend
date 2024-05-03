@@ -1,6 +1,8 @@
 package com.project.diss.service;
 
 import com.project.diss.configuration.JwtTokenService;
+import com.project.diss.converters.BadgeConverter;
+import com.project.diss.dto.BadgeDto;
 import com.project.diss.dto.UserSaveDto;
 import com.project.diss.dto.Token;
 import com.project.diss.dto.UserDto;
@@ -8,6 +10,8 @@ import com.project.diss.converters.UserConverter;
 import com.project.diss.exception.AuthenticationException;
 import com.project.diss.exception.ConflictException;
 import com.project.diss.exception.EntityNotFoundException;
+import com.project.diss.persistance.BadgeRepository;
+import com.project.diss.persistance.entity.BadgeEntity;
 import com.project.diss.persistance.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
@@ -16,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.project.diss.persistance.UserRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -27,16 +33,24 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final BadgeRepository badgeRepository;
+
     private final JwtTokenService jwtTokenService;
 
     private final UserConverter userConverter;
 
+    private final BadgeConverter badgeConverter;
+
     @Autowired
-    public UserService(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, JwtTokenService jwtTokenService, UserConverter userConverter) {
+    public UserService(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository,
+                       BadgeRepository badgeRepository, JwtTokenService jwtTokenService, UserConverter userConverter,
+                       BadgeConverter badgeConverter) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.badgeRepository = badgeRepository;
         this.jwtTokenService = jwtTokenService;
         this.userConverter = userConverter;
+        this.badgeConverter = badgeConverter;
     }
 
     private String createUserInitials(UserEntity user) {
@@ -81,6 +95,15 @@ public class UserService {
             throw new EntityNotFoundException();
         }
         return userConverter.convertUserEntityToUserDto(user.get());
+    }
+
+    public List<BadgeDto> getUserBadges(Long userId) {
+        List<BadgeEntity> badges = badgeRepository.findByUserIdAndCompleted(userId);
+        if(badges.isEmpty()) {
+            log.error("Could not find badge with userId '{}'", userId);
+            return new ArrayList<>();
+        }
+        return badgeConverter.convertBadgeEntitiesToBadgeDtos(badges);
     }
 
 }

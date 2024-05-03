@@ -1,10 +1,15 @@
 package com.project.diss.converters;
 
 import com.project.diss.dto.BadgeDto;
+import com.project.diss.dto.EmployeeDocumentGetDto;
 import com.project.diss.persistance.entity.BadgeEntity;
+import com.project.diss.persistance.entity.EmployeeDocumentEntity;
 import com.project.diss.persistance.entity.TrainingDocumentEntity;
 import com.project.diss.persistance.entity.UserEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class BadgeConverter {
@@ -16,7 +21,6 @@ public class BadgeConverter {
 
         BadgeDto badge = new BadgeDto();
 
-        badge.setTrainingId(entity.getDocument().getId());
         badge.setUserId(entity.getUser().getId());
         badge.setProgressStatus(entity.getProgressStatus());
         badge.setCurrentPage(entity.getCurrentPage());
@@ -37,5 +41,18 @@ public class BadgeConverter {
         badge.setCurrentPage(dto.getCurrentPage());
         badge.setName(trainingDocumentEntity.getTitle());
         return badge;
+    }
+
+    public List<BadgeDto> convertBadgeEntitiesToBadgeDtos(List<BadgeEntity> entities) {
+        if (entities == null) {
+            return null;
+        }
+
+        List<BadgeDto> list = new ArrayList<>(entities.size());
+        for (BadgeEntity employeeDocument : entities) {
+            list.add(convertBadgeEntityToBadgeDto(employeeDocument));
+        }
+
+        return list;
     }
 }

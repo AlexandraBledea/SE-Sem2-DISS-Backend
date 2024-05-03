@@ -1,5 +1,6 @@
 package com.project.diss.controller;
 
+import com.project.diss.dto.BadgeDto;
 import com.project.diss.dto.UserDto;
 import com.project.diss.dto.UserSaveDto;
 import com.project.diss.exception.ConflictException;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.project.diss.util.AppValidator.validateUserCreation;
 import static com.project.diss.util.Constants.*;
@@ -51,6 +53,14 @@ public class UserController {
         log.info("Start: Get user info. Timestamp: {}", LocalDateTime.now());
         ResponseEntity<UserDto> response = ResponseEntity.ok(userService.getUserInfo(id));
         log.info("End: Get user info. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
+
+    @GetMapping(value = USER_BASE_URL + "/badges/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<BadgeDto>> getUserBadges(@PathVariable("id") Long id) throws EntityNotFoundException {
+        log.info("Start: Get user badges. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<List<BadgeDto>> response = ResponseEntity.ok(userService.getUserBadges(id));
+        log.info("End: Get user badges. Timestamp: {}", LocalDateTime.now());
         return response;
     }
 
