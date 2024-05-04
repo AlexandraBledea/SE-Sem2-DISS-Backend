@@ -106,4 +106,13 @@ public class UserService {
         return badgeConverter.convertBadgeEntitiesToBadgeDtos(badges);
     }
 
+    public List<UserDto> getUsers() {
+        List<UserEntity> users = userRepository.findAll();
+        if(users.isEmpty()) {
+            log.error("Could not find any users.");
+            return new ArrayList<>();
+        }
+        return userConverter.convertUserEntitiesToUserDtos(users);
+    }
+
 }

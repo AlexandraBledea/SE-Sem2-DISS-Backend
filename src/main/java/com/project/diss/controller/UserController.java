@@ -64,5 +64,13 @@ public class UserController {
         return response;
     }
 
+    @GetMapping(value = USER_BASE_URL + GET_USERS_SUB_PATH, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserDto>> getUsers() {
+        log.info("Start: Get users. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<List<UserDto>> response = ResponseEntity.ok(userService.getUsers());
+        log.info("End: Get users. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
+
 
 }
