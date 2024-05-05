@@ -115,4 +115,23 @@ public class UserService {
         return userConverter.convertUserEntitiesToUserDtos(users);
     }
 
+    public UserDto updateUser(UserDto dto) throws EntityNotFoundException {
+        Optional<UserEntity> user = userRepository.findById(dto.getId());
+        if(user.isEmpty()) {
+            log.error("Could not find user with id '{}'.", dto.getId());
+            throw new EntityNotFoundException();
+        }
+        UserEntity updatedUser = userConverter.convertUserDtoToUserEntity(dto);
+        updatedUser.setPassword(user.get().getPassword());
+        return userConverter.convertUserEntityToUserDto(userRepository.save(updatedUser));
+    }
+
+    public void deleteUser(Long id) throws EntityNotFoundException {
+        Optional<UserEntity> user = userRepository.findById(id);
+        if(user.isEmpty()) {
+            log.error("Could not find user with id '{}'.", id);
+            throw new EntityNotFoundException();
+        }
+        userRepository.delete(user.get());
+    }
 }

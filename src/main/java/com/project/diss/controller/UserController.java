@@ -72,5 +72,20 @@ public class UserController {
         return response;
     }
 
+    @PutMapping(value = USER_BASE_URL + UPDATE_USER_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDto> updateUserProgress(@RequestBody UserDto user) throws EntityNotFoundException {
+        log.info("Start: Update user progress. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<UserDto> response = ResponseEntity.ok(userService.updateUser(user));
+        log.info("End: Update user progress. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
 
+    @DeleteMapping(value = USER_BASE_URL + "/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> deleteUser(@PathVariable("id") Long id) throws EntityNotFoundException {
+        log.info("Start: Delete user. Timestamp: {}", LocalDateTime.now());
+        userService.deleteUser(id);
+        ResponseEntity<Object> response = ResponseEntity.ok().build();
+        log.info("End: Delete user. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
 }

@@ -57,7 +57,6 @@ public class UserEntity {
     @Column
     private Integer points;
 
-    //TODO modify the cascade type, because deleting a document => deleting the user and that's not what we want
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<DocumentEntity> documents;
 

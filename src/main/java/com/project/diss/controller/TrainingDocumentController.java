@@ -75,7 +75,7 @@ public class TrainingDocumentController {
         return response;
     }
 
-    @PutMapping(value = TRAINING_DOCUMENT_BASE_URL + UPDATE_USER_SUB_PATH, produces = APPLICATION_JSON_VALUE)
+    @PutMapping(value = TRAINING_DOCUMENT_BASE_URL + UPDATE_USER_PROGRESS_SUB_PATH, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> updateUser(@RequestBody UserProgressUpdateDto userDto) throws EntityNotFoundException {
         log.info("Start: Update user. Timestamp: {}", LocalDateTime.now());
         documentService.updateUserProgress(userDto);
