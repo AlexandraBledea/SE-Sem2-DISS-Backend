@@ -2,16 +2,14 @@ package com.project.diss.service;
 
 import com.project.diss.configuration.JwtTokenService;
 import com.project.diss.converters.BadgeConverter;
-import com.project.diss.dto.BadgeDto;
-import com.project.diss.dto.UserSaveDto;
-import com.project.diss.dto.Token;
-import com.project.diss.dto.UserDto;
+import com.project.diss.dto.*;
 import com.project.diss.converters.UserConverter;
 import com.project.diss.exception.AuthenticationException;
 import com.project.diss.exception.ConflictException;
 import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.persistance.BadgeRepository;
 import com.project.diss.persistance.entity.BadgeEntity;
+import com.project.diss.persistance.entity.TrainingDocumentEntity;
 import com.project.diss.persistance.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
@@ -133,5 +131,13 @@ public class UserService {
             throw new EntityNotFoundException();
         }
         userRepository.delete(user.get());
+    }
+
+    public List<UserDto> searchForUsers(String search) {
+        List<UserEntity> userEntities = userRepository.searchForUser(search);
+        if (userEntities.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return userConverter.convertUserEntitiesToUserDtos(userEntities);
     }
 }

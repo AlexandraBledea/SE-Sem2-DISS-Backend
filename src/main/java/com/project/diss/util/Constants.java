@@ -16,4 +16,5 @@ public class Constants {
     public static final String UPDATE_USER_PROGRESS_SUB_PATH = "/update-user-progress";
     public static final String UPDATE_USER_SUB_PATH = "/update-user";
     public static final String GET_USERS_SUB_PATH = "/get-users";
+    public static final String SEARCH_USERS_SUB_PATH = "/search-users";
 }
