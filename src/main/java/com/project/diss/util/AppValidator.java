@@ -1,9 +1,6 @@
 package com.project.diss.util;
 
-import com.project.diss.dto.EmployeeDocumentSaveDto;
-import com.project.diss.dto.TrainingDocumentSaveDto;
-import com.project.diss.dto.UserSaveDto;
-import com.project.diss.dto.UserLoginDto;
+import com.project.diss.dto.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -89,6 +86,11 @@ public class AppValidator {
     }
 
     public static boolean validateTrainingDocumentCreation(TrainingDocumentSaveDto trainingDocumentDto) {
+        //TODO - add validations
+        return true;
+    }
+
+    public static boolean validateCompanyDocumentCreation(CompanyDocumentSaveDto companyDocumentDto) {
         //TODO - add validations
         return true;
     }
