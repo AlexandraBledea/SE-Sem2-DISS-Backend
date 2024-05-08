@@ -89,11 +89,5 @@ public class UserController {
         return response;
     }
 
-    @GetMapping(value = USER_BASE_URL + SEARCH_USERS_SUB_PATH + "/{searchKey}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<UserDto>> searchForUsers(@PathVariable("searchKey") String searchKey) {
-        log.info("Start: Search for users. Timestamp: {}", LocalDateTime.now());
-        ResponseEntity<List<UserDto>> response = ResponseEntity.ok(userService.searchForUsers(searchKey));
-        log.info("End: Search for users. Timestamp: {}", LocalDateTime.now());
-        return response;
-    }
+
 }

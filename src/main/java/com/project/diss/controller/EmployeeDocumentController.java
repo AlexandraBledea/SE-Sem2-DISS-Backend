@@ -86,4 +86,12 @@ public class EmployeeDocumentController {
         log.info("End: Update employee document. Timestamp: {}", LocalDateTime.now());
         return response;
     }
+
+    @GetMapping(value = EMPLOYEE_DOCUMENT_BASE_URL + SEARCH_DOCUMENT_SUB_PATH + "/{searchKey}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<EmployeeDocumentGetDto>> searchEmployeeDocument(@PathVariable("searchKey") String searchKey) throws EntityNotFoundException {
+        log.info("Start: Search employee document. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<List<EmployeeDocumentGetDto>> response = ResponseEntity.ok(documentService.searchForEmployeeDocument(searchKey));
+        log.info("End: Search employee document. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
 }

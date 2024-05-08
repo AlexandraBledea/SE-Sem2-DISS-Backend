@@ -131,4 +131,12 @@ public class EmployeeDocumentService {
         EmployeeDocumentEntity updatedEmployeeDocumentEntity = documentConverter.convertSaveEmployeeDocumentDtoToEmployeeDocumentEntity(employeeDocument, employeeDocumentEntity.get().getUser(), file);
         return documentConverter.convertEmployeeDocumentEntityToEmployeeDocumentDto(employeeDocumentRepository.save(updatedEmployeeDocumentEntity));
     }
+
+    public List<EmployeeDocumentGetDto> searchForEmployeeDocument(String searchKey) {
+        List<EmployeeDocumentEntity> employeeDocumentEntityList = employeeDocumentRepository.searchForEmployeeDocument(searchKey);
+        if (employeeDocumentEntityList.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return documentConverter.convertEmployeeDocumentEntitiesToGetEmployeeDocumentDtos(employeeDocumentEntityList);
+    }
 }

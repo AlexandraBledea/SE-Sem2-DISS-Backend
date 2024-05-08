@@ -17,4 +17,18 @@ public interface EmployeeDocumentRepository extends JpaRepository<EmployeeDocume
             "(d.visibility = true AND d.user.id != :id) ORDER BY d.lastModified DESC")
     List<EmployeeDocumentEntity> findAllRelevantDocumentsSorted(Long id);
 
+    @Query("SELECT d, " +
+            "CASE " +
+            "WHEN d.keywords LIKE LOWER(CONCAT('%', :search, '%')) THEN 1 " +
+            "WHEN d.title LIKE LOWER(CONCAT('%', :search, '%')) THEN 2 " +
+            "WHEN d.text LIKE LOWER(CONCAT('%', :search, '%')) THEN 3 " +
+            "ELSE 4 " +
+            "END AS relevance " +
+            "FROM EmployeeDocumentEntity d " +
+            "WHERE d.keywords LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR d.title LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR d.text LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "ORDER BY relevance")
+    List<EmployeeDocumentEntity> searchForEmployeeDocument(String search);
+
 }
