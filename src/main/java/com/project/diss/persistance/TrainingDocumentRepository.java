@@ -17,4 +17,18 @@ public interface TrainingDocumentRepository extends JpaRepository<TrainingDocume
             "SELECT b.document.id FROM BadgeEntity b WHERE b.user.id = :id AND b.progressStatus = 'Completed' AND b.document.id IS NOT NULL) " +
             "ORDER BY td.requiredLevel ASC, td.reward DESC")
     List<TrainingDocumentEntity> findTodoTrainingDocumentsForUser(Long id);
+
+    @Query("SELECT d, " +
+            "CASE " +
+            "WHEN d.keywords LIKE LOWER(CONCAT('%', :search, '%')) THEN 1 " +
+            "WHEN d.title LIKE LOWER(CONCAT('%', :search, '%')) THEN 2 " +
+            "WHEN d.text LIKE LOWER(CONCAT('%', :search, '%')) THEN 3 " +
+            "ELSE 4 " +
+            "END AS relevance " +
+            "FROM TrainingDocumentEntity d " +
+            "WHERE d.keywords LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR d.title LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR d.text LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "ORDER BY relevance")
+    List<TrainingDocumentEntity> searchForTrainingDocuments(String search);
 }

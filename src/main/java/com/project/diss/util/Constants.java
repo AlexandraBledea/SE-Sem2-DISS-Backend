@@ -22,4 +22,6 @@ public class Constants {
     public static final String GET_COMMENTS_SUB_PATH = "/get-comments";
     public static final String UPDATE_COMMENT_SUB_PATH = "/update-comment";
     public static final String SEARCH_DOCUMENT_SUB_PATH = "/search-document";
+
+    public static final String SEARCH_TRAINING_SUB_PATH = "/search-training";
 }
