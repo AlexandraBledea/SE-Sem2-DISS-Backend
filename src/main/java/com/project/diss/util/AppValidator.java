@@ -89,6 +89,11 @@ public class AppValidator {
         //TODO - add validations
         return true;
     }
+
+    public static boolean validateCompanyDocumentCreation(CompanyDocumentSaveDto companyDocumentDto) {
+        //TODO - add validations
+        return true;
+    }
     public static boolean validateCommentCreation(CommentSaveDto commentDto) {
         //TODO - add validations
         return true;
