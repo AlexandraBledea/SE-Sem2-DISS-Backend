@@ -58,7 +58,7 @@ public class TrainingDocumentController {
         return response;
     }
 
-    @PostMapping(value = TRAINING_DOCUMENT_BASE_URL + GET_TRAINING_SUB_PATH, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = TRAINING_DOCUMENT_BASE_URL + GET_TRAINING_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<TrainingDocumentViewDto> getTrainingDocument(@RequestBody TrainingDocumentStartDto dto) throws EntityNotFoundException {
         log.info("Start: Get training document. Timestamp: {}", LocalDateTime.now());
         ResponseEntity<TrainingDocumentViewDto> response = ResponseEntity.ok(documentService.getTrainingDocument(dto));
@@ -66,7 +66,7 @@ public class TrainingDocumentController {
         return response;
     }
 
-    @PostMapping(value = TRAINING_DOCUMENT_BASE_URL + UPDATE_BADGE_SUB_PATH, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = TRAINING_DOCUMENT_BASE_URL + UPDATE_BADGE_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> updateBadgeTraining(@RequestBody BadgeDto badgeDto) throws EntityNotFoundException {
         log.info("Start: Start training document. Timestamp: {}", LocalDateTime.now());
         documentService.updateBadgeTraining(badgeDto);
@@ -75,7 +75,7 @@ public class TrainingDocumentController {
         return response;
     }
 
-    @PutMapping(value = TRAINING_DOCUMENT_BASE_URL + UPDATE_USER_PROGRESS_SUB_PATH, produces = APPLICATION_JSON_VALUE)
+    @PutMapping(value = TRAINING_DOCUMENT_BASE_URL + UPDATE_USER_PROGRESS_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> updateUser(@RequestBody UserProgressUpdateDto userDto) throws EntityNotFoundException {
         log.info("Start: Update user. Timestamp: {}", LocalDateTime.now());
         documentService.updateUserProgress(userDto);
@@ -93,11 +93,19 @@ public class TrainingDocumentController {
         return response;
     }
 
-    @GetMapping(value = TRAINING_DOCUMENT_BASE_URL + SEARCH_TRAINING_SUB_PATH + "/{searchKey}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TrainingDocumentGetDto>> searchTrainingDocument(@PathVariable("searchKey") String searchKey) throws EntityNotFoundException {
-        log.info("Start: Search training document. Timestamp: {}", LocalDateTime.now());
-        ResponseEntity<List<TrainingDocumentGetDto>> response = ResponseEntity.ok(documentService.searchForTrainingDocuments(searchKey));
-        log.info("End: Search training document. Timestamp: {}", LocalDateTime.now());
+    @PostMapping(value = TRAINING_DOCUMENT_BASE_URL + SEARCH_COMPLETED_TRAINING_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TrainingDocumentGetDto>> searchCompletedTrainingDocuments(@RequestBody DocumentSearchRequestDto searchRequest) {
+        log.info("Start: Search completed training documents. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<List<TrainingDocumentGetDto>> response = ResponseEntity.ok(documentService.searchForCompletedTrainingDocuments(searchRequest));
+        log.info("End: Search completed training documents. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
+
+    @PostMapping(value = TRAINING_DOCUMENT_BASE_URL + SEARCH_TODO_TRAINING_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TrainingDocumentGetDto>> searchTodoTrainingDocuments(@RequestBody DocumentSearchRequestDto searchRequest) {
+        log.info("Start: Search todo training documents. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<List<TrainingDocumentGetDto>> response = ResponseEntity.ok(documentService.searchForTodoTrainingDocuments(searchRequest));
+        log.info("End: Search todo training documents. Timestamp: {}", LocalDateTime.now());
         return response;
     }
 }

@@ -3,6 +3,7 @@ package com.project.diss.controller;
 import com.project.diss.dto.EmployeeDocumentDto;
 import com.project.diss.dto.EmployeeDocumentGetDto;
 import com.project.diss.dto.EmployeeDocumentSaveDto;
+import com.project.diss.dto.DocumentSearchRequestDto;
 import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.exception.RequestNotValidException;
 import com.project.diss.service.EmployeeDocumentService;
@@ -44,7 +45,6 @@ public class EmployeeDocumentController {
         return response;
     }
 
-    //TODO - FIXED
     @GetMapping(value = EMPLOYEE_DOCUMENT_BASE_URL + GET_OWN_DOCUMENTS_SUB_PATH + "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<EmployeeDocumentGetDto>> getEmployeeOwnDocuments(@PathVariable Long id) {
         log.info("Start: Get employee own documents. Timestamp: {}", LocalDateTime.now());
@@ -53,7 +53,6 @@ public class EmployeeDocumentController {
         return response;
     }
 
-    //TODO - FIXED
     @GetMapping(value = EMPLOYEE_DOCUMENT_BASE_URL + GET_DOCUMENTS_SUB_PATH + "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<EmployeeDocumentGetDto>> getEmployeeDocuments(@PathVariable Long id) throws EntityNotFoundException {
         log.info("Start: Get employee documents. Timestamp: {}", LocalDateTime.now());
@@ -87,10 +86,18 @@ public class EmployeeDocumentController {
         return response;
     }
 
-    @GetMapping(value = EMPLOYEE_DOCUMENT_BASE_URL + SEARCH_DOCUMENT_SUB_PATH + "/{searchKey}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<EmployeeDocumentGetDto>> searchEmployeeDocument(@PathVariable("searchKey") String searchKey) throws EntityNotFoundException {
+    @PostMapping(value = EMPLOYEE_DOCUMENT_BASE_URL + SEARCH_DOCUMENT_SUB_PATH , consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<EmployeeDocumentGetDto>> searchEmployeeDocument(@RequestBody DocumentSearchRequestDto searchRequest) {
         log.info("Start: Search employee document. Timestamp: {}", LocalDateTime.now());
-        ResponseEntity<List<EmployeeDocumentGetDto>> response = ResponseEntity.ok(documentService.searchForEmployeeDocument(searchKey));
+        ResponseEntity<List<EmployeeDocumentGetDto>> response = ResponseEntity.ok(documentService.searchForEmployeeDocuments(searchRequest));
+        log.info("End: Search employee document. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
+
+    @PostMapping(value = EMPLOYEE_DOCUMENT_BASE_URL + SEARCH_OWNED_DOCUMENT_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<EmployeeDocumentGetDto>> searchOwnedEmployeeDocument(@RequestBody DocumentSearchRequestDto searchRequest) {
+        log.info("Start: Search employee document. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<List<EmployeeDocumentGetDto>> response = ResponseEntity.ok(documentService.searchForOwnedEmployeeDocuments(searchRequest));
         log.info("End: Search employee document. Timestamp: {}", LocalDateTime.now());
         return response;
     }

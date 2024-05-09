@@ -10,7 +10,9 @@ import java.util.List;
 @Repository
 public interface TrainingDocumentRepository extends JpaRepository<TrainingDocumentEntity, Long> {
 
-    @Query("SELECT td FROM TrainingDocumentEntity td JOIN BadgeEntity b ON td.id = b.document.id WHERE b.user.id =:id AND b.progressStatus = 'Completed' AND b.document.id IS NOT NULL")
+    @Query("SELECT td FROM TrainingDocumentEntity td JOIN BadgeEntity b ON td.id = b.document.id " +
+            "WHERE b.user.id = :id AND b.progressStatus = 'Completed' " +
+            "AND b.document.id IS NOT NULL ORDER BY td.requiredLevel DESC , td.reward DESC")
     List<TrainingDocumentEntity> findCompletedTrainingDocumentsForUser(Long id);
 
     @Query("SELECT td FROM TrainingDocumentEntity td WHERE td.id NOT IN (" +
@@ -18,17 +20,23 @@ public interface TrainingDocumentRepository extends JpaRepository<TrainingDocume
             "ORDER BY td.requiredLevel ASC, td.reward DESC")
     List<TrainingDocumentEntity> findTodoTrainingDocumentsForUser(Long id);
 
-    @Query("SELECT d, " +
-            "CASE " +
-            "WHEN d.keywords LIKE LOWER(CONCAT('%', :search, '%')) THEN 1 " +
-            "WHEN d.title LIKE LOWER(CONCAT('%', :search, '%')) THEN 2 " +
-            "WHEN d.text LIKE LOWER(CONCAT('%', :search, '%')) THEN 3 " +
-            "ELSE 4 " +
-            "END AS relevance " +
+    @Query("SELECT d " +
             "FROM TrainingDocumentEntity d " +
-            "WHERE d.keywords LIKE LOWER(CONCAT('%', :search, '%')) " +
-            "OR d.title LIKE LOWER(CONCAT('%', :search, '%')) " +
-            "OR d.text LIKE LOWER(CONCAT('%', :search, '%')) " +
-            "ORDER BY relevance")
-    List<TrainingDocumentEntity> searchForTrainingDocuments(String search);
+            "WHERE (LOWER(d.keywords) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR LOWER(d.title) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR LOWER(d.text) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+            "AND d.id NOT IN (" +
+            "SELECT b.document.id FROM BadgeEntity b WHERE b.user.id = :id AND b.progressStatus = 'Completed' AND b.document.id IS NOT NULL) " +
+            "ORDER BY d.requiredLevel DESC, d.reward DESC")
+    List<TrainingDocumentEntity> searchForTodoTrainingDocuments(String search, Long id);
+
+    @Query("SELECT d " +
+            "FROM TrainingDocumentEntity d " +
+            "JOIN BadgeEntity b ON d.id = b.document.id " +
+            "WHERE (LOWER(d.keywords) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR LOWER(d.title) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR LOWER(d.text) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+            "AND b.user.id = :id AND b.progressStatus = 'Completed' AND b.document.id IS NOT NULL " +
+            "ORDER BY d.requiredLevel ASC , d.reward DESC")
+    List<TrainingDocumentEntity> searchForCompletedTrainingDocuments(String search, Long id);
 }

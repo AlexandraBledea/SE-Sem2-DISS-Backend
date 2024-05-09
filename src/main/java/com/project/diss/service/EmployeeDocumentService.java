@@ -1,11 +1,8 @@
 package com.project.diss.service;
 
 import com.project.diss.converters.FileConverter;
-import com.project.diss.dto.EmployeeDocumentDto;
+import com.project.diss.dto.*;
 import com.project.diss.converters.EmployeeDocumentConverter;
-import com.project.diss.dto.FileDto;
-import com.project.diss.dto.EmployeeDocumentGetDto;
-import com.project.diss.dto.EmployeeDocumentSaveDto;
 import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.persistance.DocumentRepository;
 import com.project.diss.persistance.EmployeeDocumentRepository;
@@ -132,9 +129,21 @@ public class EmployeeDocumentService {
         return documentConverter.convertEmployeeDocumentEntityToEmployeeDocumentDto(employeeDocumentRepository.save(updatedEmployeeDocumentEntity));
     }
 
-    public List<EmployeeDocumentGetDto> searchForEmployeeDocument(String searchKey) {
-        List<EmployeeDocumentEntity> employeeDocumentEntityList = employeeDocumentRepository.searchForEmployeeDocument(searchKey);
+    public List<EmployeeDocumentGetDto> searchForEmployeeDocuments(DocumentSearchRequestDto searchRequest) {
+        List<EmployeeDocumentEntity> employeeDocumentEntityList = employeeDocumentRepository
+                .searchForEmployeeDocument(searchRequest.getSearchKey(), searchRequest.getUserId());
         if (employeeDocumentEntityList.isEmpty()) {
+            log.info("Could not find employee documents for search key {}", searchRequest.getSearchKey());
+            return new ArrayList<>();
+        }
+        return documentConverter.convertEmployeeDocumentEntitiesToGetEmployeeDocumentDtos(employeeDocumentEntityList);
+    }
+
+    public List<EmployeeDocumentGetDto> searchForOwnedEmployeeDocuments(DocumentSearchRequestDto searchRequest) {
+        List<EmployeeDocumentEntity> employeeDocumentEntityList = employeeDocumentRepository
+                .searchOwnedEmployeeDocuments(searchRequest.getSearchKey(), searchRequest.getUserId());
+        if (employeeDocumentEntityList.isEmpty()) {
+            log.info("Could not find owned employee documents for search key {}", searchRequest.getSearchKey());
             return new ArrayList<>();
         }
         return documentConverter.convertEmployeeDocumentEntitiesToGetEmployeeDocumentDtos(employeeDocumentEntityList);

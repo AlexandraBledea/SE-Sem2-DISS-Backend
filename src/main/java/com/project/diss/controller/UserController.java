@@ -1,8 +1,6 @@
 package com.project.diss.controller;
 
-import com.project.diss.dto.BadgeDto;
-import com.project.diss.dto.UserDto;
-import com.project.diss.dto.UserSaveDto;
+import com.project.diss.dto.*;
 import com.project.diss.exception.ConflictException;
 import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.exception.RequestNotValidException;
@@ -89,5 +87,11 @@ public class UserController {
         return response;
     }
 
-
+    @GetMapping(value = USER_BASE_URL + SEARCH_USERS_SUB_PATH + "/{searchKey}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserDto>> searchTodoTrainingDocuments(@PathVariable String searchKey) {
+        log.info("Start: Search users. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<List<UserDto>> response = ResponseEntity.ok(userService.searchForUsers(searchKey));
+        log.info("End: Search users. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
 }
