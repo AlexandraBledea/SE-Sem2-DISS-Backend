@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,7 +73,7 @@ public class CompanyDocumentService {
         List<CompanyDocumentEntity> companyDocumentEntities = companyDocumentRepository.findAll();
         if (companyDocumentEntities.isEmpty()) {
             log.error("No company documents found in the database");
-            throw new EntityNotFoundException();
+            return new ArrayList<>();
         }
         return companyDocumentConverter.convertCompanyDocumentEntitiesToCompanyDocumentGetDtos(companyDocumentEntities);
     }
