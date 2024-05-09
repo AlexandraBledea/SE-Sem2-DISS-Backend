@@ -68,7 +68,7 @@ public class CompanyDocumentService {
         throw new EntityNotFoundException();
     }
 
-    public List<CompanyDocumentGetDto> getCcompanyDocuments() throws EntityNotFoundException {
+    public List<CompanyDocumentGetDto> getCompanyDocuments() throws EntityNotFoundException {
         List<CompanyDocumentEntity> companyDocumentEntities = companyDocumentRepository.findAll();
         if (companyDocumentEntities.isEmpty()) {
             log.error("No company documents found in the database");

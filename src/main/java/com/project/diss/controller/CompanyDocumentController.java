@@ -3,6 +3,7 @@ package com.project.diss.controller;
 import com.project.diss.dto.CompanyDocumentDto;
 import com.project.diss.dto.CompanyDocumentGetDto;
 import com.project.diss.dto.CompanyDocumentSaveDto;
+import com.project.diss.dto.EmployeeDocumentDto;
 import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.exception.RequestNotValidException;
 import com.project.diss.service.CompanyDocumentService;
@@ -47,8 +48,16 @@ public class CompanyDocumentController {
     @GetMapping(value = COMPANY_DOCUMENT_BASE_URL + GET_DOCUMENTS_SUB_PATH, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CompanyDocumentGetDto>> getCompanyDocuments() throws EntityNotFoundException {
         log.info("Start: Get company documents. Timestamp: {}", LocalDateTime.now());
-        ResponseEntity<List<CompanyDocumentGetDto>> response = ResponseEntity.ok(documentService.getCcompanyDocuments());
+        ResponseEntity<List<CompanyDocumentGetDto>> response = ResponseEntity.ok(documentService.getCompanyDocuments());
         log.info("End: Get company documents. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
+
+    @GetMapping(value = COMPANY_DOCUMENT_BASE_URL + GET_DOCUMENT_SUB_PATH + "/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<CompanyDocumentDto> getCompanyDocument(@PathVariable Long id) throws EntityNotFoundException {
+        log.info("Start: Get employee document. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<CompanyDocumentDto> response = ResponseEntity.ok(documentService.getCompanyDocument(id));
+        log.info("End: Get employee document. Timestamp: {}", LocalDateTime.now());
         return response;
     }
 
