@@ -30,7 +30,6 @@ public class CompanyDocumentController {
         this.documentService = documentService;
     }
 
-    // TODO - Add authorization
     @PostMapping(value = COMPANY_DOCUMENT_BASE_URL + CREATE_DOCUMENT_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CompanyDocumentDto> createCompanyDocument(@RequestBody CompanyDocumentSaveDto companyDocument) throws RequestNotValidException, EntityNotFoundException {
         log.info("Start: Create company document. Timestamp: {}", LocalDateTime.now());
@@ -70,7 +69,6 @@ public class CompanyDocumentController {
         return response;
     }
 
-    // TODO - Add authorization
     @PutMapping(value = COMPANY_DOCUMENT_BASE_URL + UPDATE_DOCUMENT_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CompanyDocumentDto> updateCompanyDocument(@RequestBody CompanyDocumentSaveDto companyDocument) throws EntityNotFoundException {
         log.info("Start: Update company document. Timestamp: {}", LocalDateTime.now());
