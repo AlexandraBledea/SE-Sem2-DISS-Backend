@@ -136,6 +136,7 @@ public class UserService {
     public List<UserDto> searchForUsers(String search) {
         List<UserEntity> userEntities = userRepository.searchForUser(search);
         if (userEntities.isEmpty()) {
+            log.error("Could not find any users for the search key '{}'.", search);
             return new ArrayList<>();
         }
         return userConverter.convertUserEntitiesToUserDtos(userEntities);

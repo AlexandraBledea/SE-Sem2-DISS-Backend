@@ -149,11 +149,22 @@ public class TrainingDocumentService {
         trainingDocumentRepository.deleteById(id);
     }
 
-    public List<TrainingDocumentGetDto> searchForTrainingDocuments(String searchKey) {
-        List<TrainingDocumentEntity> trainingDocumentEntityList = trainingDocumentRepository.searchForTrainingDocuments(searchKey);
+    public List<TrainingDocumentGetDto> searchForCompletedTrainingDocuments(DocumentSearchRequestDto searchRequest) {
+        List<TrainingDocumentEntity> trainingDocumentEntityList = trainingDocumentRepository.searchForCompletedTrainingDocuments(searchRequest.getSearchKey(), searchRequest.getUserId());
         if (trainingDocumentEntityList.isEmpty()) {
+            log.info("Could not find completed training documents for the given search key {}", searchRequest.getSearchKey());
             return new ArrayList<>();
         }
         return documentConverter.convertTrainingDocumentEntitiesToTrainingDocumentGetDtos(trainingDocumentEntityList);
     }
+
+    public List<TrainingDocumentGetDto> searchForTodoTrainingDocuments(DocumentSearchRequestDto searchRequest) {
+        List<TrainingDocumentEntity> trainingDocumentEntityList = trainingDocumentRepository.searchForTodoTrainingDocuments(searchRequest.getSearchKey(), searchRequest.getUserId());
+        if (trainingDocumentEntityList.isEmpty()) {
+            log.info("Could not find todo training documents for the given search key {}", searchRequest.getSearchKey());
+            return new ArrayList<>();
+        }
+        return documentConverter.convertTrainingDocumentEntitiesToTrainingDocumentGetDtos(trainingDocumentEntityList);
+    }
+
 }
