@@ -92,4 +92,12 @@ public class TrainingDocumentController {
         log.info("End: Delete training document. Timestamp: {}", LocalDateTime.now());
         return response;
     }
+
+    @GetMapping(value = TRAINING_DOCUMENT_BASE_URL + SEARCH_TRAINING_SUB_PATH + "/{searchKey}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TrainingDocumentGetDto>> searchTrainingDocument(@PathVariable("searchKey") String searchKey) throws EntityNotFoundException {
+        log.info("Start: Search training document. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<List<TrainingDocumentGetDto>> response = ResponseEntity.ok(documentService.searchForTrainingDocuments(searchKey));
+        log.info("End: Search training document. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
 }

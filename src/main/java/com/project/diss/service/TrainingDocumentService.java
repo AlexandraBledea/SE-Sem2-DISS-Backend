@@ -148,4 +148,12 @@ public class TrainingDocumentService {
         }
         trainingDocumentRepository.deleteById(id);
     }
+
+    public List<TrainingDocumentGetDto> searchForTrainingDocuments(String searchKey) {
+        List<TrainingDocumentEntity> trainingDocumentEntityList = trainingDocumentRepository.searchForTrainingDocuments(searchKey);
+        if (trainingDocumentEntityList.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return documentConverter.convertTrainingDocumentEntitiesToTrainingDocumentGetDtos(trainingDocumentEntityList);
+    }
 }
