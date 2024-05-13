@@ -74,7 +74,7 @@ public class EmployeeDocumentService {
     public List<EmployeeDocumentGetDto> getEmployeeDocuments(Long id) throws EntityNotFoundException {
         List<EmployeeDocumentEntity> documents = employeeDocumentRepository.findAllRelevantDocumentsSorted(id);
         if(documents.isEmpty()) {
-            throw new EntityNotFoundException();
+            return new ArrayList<>();
         }
         return documentConverter.convertEmployeeDocumentEntitiesToGetEmployeeDocumentDtos(documents);
     }
