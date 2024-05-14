@@ -116,4 +116,12 @@ public class CompanyDocumentService {
         CompanyDocumentEntity updatedCompanyDocumentEntity = companyDocumentConverter.convertSaveCompanyDocumentDtoToCompanyDocumentEntity(companyDocumentDto, companyDocumentEntity.get().getUser(), fileEntity);
         return companyDocumentConverter.convertCompanyDocumentEntityToCompanyDocumentDto(companyDocumentRepository.save(updatedCompanyDocumentEntity));
     }
+
+    public List<CompanyDocumentGetDto> searchForCompanyDocument(String searchKey) {
+        List<CompanyDocumentEntity> companyDocumentEntityList = companyDocumentRepository.searchForCompanyDocuments(searchKey);
+        if (companyDocumentEntityList.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return companyDocumentConverter.convertCompanyDocumentEntitiesToCompanyDocumentGetDtos(companyDocumentEntityList);
+    }
 }

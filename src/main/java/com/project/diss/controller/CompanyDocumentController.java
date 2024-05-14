@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.project.diss.util.AppValidator.validateCompanyDocumentCreation;
 import static com.project.diss.util.Constants.*;
+import static com.project.diss.util.Constants.SEARCH_DOCUMENT_SUB_PATH;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -74,6 +75,14 @@ public class CompanyDocumentController {
         log.info("Start: Update company document. Timestamp: {}", LocalDateTime.now());
         ResponseEntity<CompanyDocumentDto> response = ResponseEntity.ok(documentService.updateCompanyDocument(companyDocument));
         log.info("End: Update company document. Timestamp: {}", LocalDateTime.now());
+        return response;
+    }
+
+    @GetMapping(value = COMPANY_DOCUMENT_BASE_URL + SEARCH_DOCUMENT_SUB_PATH + "/{searchKey}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CompanyDocumentGetDto>> searchEmployeeDocument(@PathVariable("searchKey") String searchKey) throws EntityNotFoundException {
+        log.info("Start: Search company document. Timestamp: {}", LocalDateTime.now());
+        ResponseEntity<List<CompanyDocumentGetDto>> response = ResponseEntity.ok(documentService.searchForCompanyDocument(searchKey));
+        log.info("End: Search company document. Timestamp: {}", LocalDateTime.now());
         return response;
     }
 }
