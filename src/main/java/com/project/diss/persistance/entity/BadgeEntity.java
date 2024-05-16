@@ -23,7 +23,7 @@ public class BadgeEntity {
     private Long id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "fk_document_id")
+    @JoinColumn(name = "fk_document_id", nullable = true)
     private DocumentEntity document;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

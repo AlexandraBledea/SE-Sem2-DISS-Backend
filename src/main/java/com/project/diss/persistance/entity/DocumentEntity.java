@@ -1,6 +1,7 @@
 package com.project.diss.persistance.entity;
 
 
+import com.project.diss.service.UserService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

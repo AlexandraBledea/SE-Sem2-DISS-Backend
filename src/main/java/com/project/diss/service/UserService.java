@@ -17,10 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.project.diss.persistance.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -123,6 +125,16 @@ public class UserService {
         updatedUser.setPassword(user.get().getPassword());
         return userConverter.convertUserEntityToUserDto(userRepository.save(updatedUser));
     }
+    public  void nullifyDocumentReference(Long documentId) {
+        List<BadgeEntity> badgeEntitiesCompleted = badgeRepository.findByDocumentIdAndCompleted(documentId);
+        badgeEntitiesCompleted = badgeEntitiesCompleted.stream()
+                .peek(badge -> badge.setDocument(null))
+                .toList();
+        badgeRepository.saveAll(badgeEntitiesCompleted);
+
+        List<BadgeEntity> badgeEntitiesInProgress = badgeRepository.findByDocumentIdAndInProgress(documentId);
+        badgeRepository.deleteAll(badgeEntitiesInProgress);
+    }
 
     public void deleteUser(Long id) throws EntityNotFoundException {
         Optional<UserEntity> user = userRepository.findById(id);
@@ -130,6 +142,16 @@ public class UserService {
             log.error("Could not find user with id '{}'.", id);
             throw new EntityNotFoundException();
         }
+
+        List<TrainingDocumentEntity> trainings = user.get().getDocuments().stream()
+                .filter(document -> document instanceof TrainingDocumentEntity)
+                .map(document -> (TrainingDocumentEntity) document)
+                .toList();
+
+        for(TrainingDocumentEntity training: trainings) {
+            nullifyDocumentReference(training.getId());
+        }
+
         userRepository.delete(user.get());
     }
 
