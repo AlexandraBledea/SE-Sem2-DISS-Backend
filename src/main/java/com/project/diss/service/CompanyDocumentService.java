@@ -2,10 +2,7 @@ package com.project.diss.service;
 
 import com.project.diss.converters.CompanyDocumentConverter;
 import com.project.diss.converters.FileConverter;
-import com.project.diss.dto.CompanyDocumentDto;
-import com.project.diss.dto.CompanyDocumentGetDto;
-import com.project.diss.dto.CompanyDocumentSaveDto;
-import com.project.diss.dto.FileDto;
+import com.project.diss.dto.*;
 import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.persistance.CompanyDocumentRepository;
 import com.project.diss.persistance.DocumentRepository;
@@ -69,7 +66,7 @@ public class CompanyDocumentService {
         throw new EntityNotFoundException();
     }
 
-    public List<CompanyDocumentGetDto> getCompanyDocuments() throws EntityNotFoundException {
+    public List<CompanyDocumentGetDto> getCompanyDocuments() {
         List<CompanyDocumentEntity> companyDocumentEntities = companyDocumentRepository.findAll();
         if (companyDocumentEntities.isEmpty()) {
             log.error("No company documents found in the database");
@@ -117,9 +114,10 @@ public class CompanyDocumentService {
         return companyDocumentConverter.convertCompanyDocumentEntityToCompanyDocumentDto(companyDocumentRepository.save(updatedCompanyDocumentEntity));
     }
 
-    public List<CompanyDocumentGetDto> searchForCompanyDocument(String searchKey) {
-        List<CompanyDocumentEntity> companyDocumentEntityList = companyDocumentRepository.searchForCompanyDocuments(searchKey);
+    public List<CompanyDocumentGetDto> searchForCompanyDocument(DocumentSearchRequestDto searchRequest) {
+        List<CompanyDocumentEntity> companyDocumentEntityList = companyDocumentRepository.searchForCompanyDocuments(searchRequest.getSearchKey());
         if (companyDocumentEntityList.isEmpty()) {
+            log.info("Could not find company documents for search key {}", searchRequest.getSearchKey());
             return new ArrayList<>();
         }
         return companyDocumentConverter.convertCompanyDocumentEntitiesToCompanyDocumentGetDtos(companyDocumentEntityList);

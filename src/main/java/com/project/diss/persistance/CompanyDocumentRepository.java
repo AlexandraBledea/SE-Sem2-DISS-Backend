@@ -12,15 +12,15 @@ import java.util.List;
 public interface CompanyDocumentRepository extends JpaRepository<CompanyDocumentEntity, Long>{
     @Query("SELECT d, " +
             "CASE " +
-            "WHEN d.keywords LIKE LOWER(CONCAT('%', :search, '%')) THEN 1 " +
-            "WHEN d.title LIKE LOWER(CONCAT('%', :search, '%')) THEN 2 " +
-            "WHEN d.text LIKE LOWER(CONCAT('%', :search, '%')) THEN 3 " +
+            "WHEN LOWER(d.keywords) LIKE LOWER(CONCAT('%', :search, '%')) THEN 1 " +
+            "WHEN LOWER(d.title) LIKE LOWER(CONCAT('%', :search, '%')) THEN 2 " +
+            "WHEN LOWER(d.text) LIKE LOWER(CONCAT('%', :search, '%')) THEN 3 " +
             "ELSE 4 " +
             "END AS relevance " +
             "FROM CompanyDocumentEntity d " +
-            "WHERE d.keywords LIKE LOWER(CONCAT('%', :search, '%')) " +
-            "OR d.title LIKE LOWER(CONCAT('%', :search, '%')) " +
-            "OR d.text LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "WHERE (d.keywords) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR (d.title) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR (d.text) LIKE LOWER(CONCAT('%', :search, '%')) " +
             "ORDER BY relevance")
     List<CompanyDocumentEntity> searchForCompanyDocuments(String search);
 }

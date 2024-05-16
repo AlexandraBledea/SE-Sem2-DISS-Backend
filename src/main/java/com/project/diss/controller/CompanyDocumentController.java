@@ -1,9 +1,6 @@
 package com.project.diss.controller;
 
-import com.project.diss.dto.CompanyDocumentDto;
-import com.project.diss.dto.CompanyDocumentGetDto;
-import com.project.diss.dto.CompanyDocumentSaveDto;
-import com.project.diss.dto.EmployeeDocumentDto;
+import com.project.diss.dto.*;
 import com.project.diss.exception.EntityNotFoundException;
 import com.project.diss.exception.RequestNotValidException;
 import com.project.diss.service.CompanyDocumentService;
@@ -78,10 +75,10 @@ public class CompanyDocumentController {
         return response;
     }
 
-    @GetMapping(value = COMPANY_DOCUMENT_BASE_URL + SEARCH_DOCUMENT_SUB_PATH + "/{searchKey}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CompanyDocumentGetDto>> searchEmployeeDocument(@PathVariable("searchKey") String searchKey) throws EntityNotFoundException {
+    @PostMapping(value = COMPANY_DOCUMENT_BASE_URL + SEARCH_DOCUMENT_SUB_PATH, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CompanyDocumentGetDto>> searchEmployeeDocument(@RequestBody DocumentSearchRequestDto searchRequest) {
         log.info("Start: Search company document. Timestamp: {}", LocalDateTime.now());
-        ResponseEntity<List<CompanyDocumentGetDto>> response = ResponseEntity.ok(documentService.searchForCompanyDocument(searchKey));
+        ResponseEntity<List<CompanyDocumentGetDto>> response = ResponseEntity.ok(documentService.searchForCompanyDocument(searchRequest));
         log.info("End: Search company document. Timestamp: {}", LocalDateTime.now());
         return response;
     }
