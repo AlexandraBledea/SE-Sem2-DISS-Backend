@@ -55,8 +55,8 @@ public class CommentService {
         Optional<DocumentEntity> documentEntity = documentRepository.findById(id);
         if (documentEntity.isPresent()) {
             if (documentEntity.get() instanceof EmployeeDocumentEntity && !((EmployeeDocumentEntity) documentEntity.get()).getVisibility()) {
-                log.error("Could not save database entry because document with id {} has visibility false", id);
-                throw new RequestNotValidException();
+                log.error("Could not get database entries because document with id {} has visibility false", id);
+                return new ArrayList<>();
             }
 
             List<CommentEntity> comments = commentRepository.findByDocumentId(id);
@@ -77,7 +77,7 @@ public class CommentService {
         }
 
         if (commentEntity.get().getDocument() instanceof EmployeeDocumentEntity && !((EmployeeDocumentEntity) commentEntity.get().getDocument()).getVisibility()) {
-            log.error("Could not save database entry because document with id {} has visibility false", id);
+            log.error("Could not delete database entry because document with id {} has visibility false", id);
             throw new RequestNotValidException();
         }
         commentRepository.deleteById(id);
@@ -92,7 +92,7 @@ public class CommentService {
         }
 
         if (commentEntity.get().getDocument() instanceof EmployeeDocumentEntity && !((EmployeeDocumentEntity) commentEntity.get().getDocument()).getVisibility()) {
-            log.error("Could not save database entry because document with id {} has visibility false", commentEntity.get().getDocument().getId());
+            log.error("Could not update database entry because document with id {} has visibility false", commentEntity.get().getDocument().getId());
             throw new RequestNotValidException();
         }
 
