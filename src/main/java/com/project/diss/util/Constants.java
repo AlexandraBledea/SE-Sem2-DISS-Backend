@@ -15,6 +15,7 @@ public class Constants {
     public static final String SEARCH_TODO_TRAINING_SUB_PATH = "/search-todo-trainings";
     public static final String SEARCH_COMPLETED_TRAINING_SUB_PATH = "/search-completed-trainings";
     public static final String UPDATE_BADGE_SUB_PATH = "/update-progress";
+
     public static final String GET_BADGES_SUB_PATH = "/get-badges";
     public static final String CREATE_USER_SUB_PATH = "/create-user";
     public static final String UPDATE_USER_PROGRESS_SUB_PATH = "/update-user-progress";
@@ -24,5 +25,5 @@ public class Constants {
     public static final String CREATE_COMMENT_SUB_PATH = "/create-comment";
     public static final String GET_COMMENTS_SUB_PATH = "/get-comments";
     public static final String UPDATE_COMMENT_SUB_PATH = "/update-comment";
-
+    public static final String SEARCH_TRAINING_SUB_PATH = "/search-training";
 }
